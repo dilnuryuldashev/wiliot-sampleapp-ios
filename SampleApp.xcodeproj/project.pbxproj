@@ -7,13 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C31500828D86BD5000A3183 /* BLEPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31500728D86BD5000A3183 /* BLEPacket.swift */; };
-		2C31500A28D86C7A000A3183 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31500928D86C7A000A3183 /* Data+Extension.swift */; };
-		2C31500C28D89E88000A3183 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31500B28D89E88000A3183 /* LocationService.swift */; };
-		2C31500E28D89EF0000A3183 /* iBeacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31500D28D89EF0000A3183 /* iBeacon.swift */; };
-		2C31501028D8AC3B000A3183 /* BeaconDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31500F28D8AC3B000A3183 /* BeaconDataReader.swift */; };
-		2C31501228D8ACF8000A3183 /* PacketsPacingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31501128D8ACF8000A3183 /* PacketsPacingService.swift */; };
-		2C31501428D8AD15000A3183 /* WeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31501328D8AD15000A3183 /* WeakObject.swift */; };
 		2C8B5B1828D8456900BC45E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B1728D8456900BC45E8 /* AppDelegate.swift */; };
 		2C8B5B1A28D8456900BC45E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B1928D8456900BC45E8 /* SceneDelegate.swift */; };
 		2C8B5B1C28D8456900BC45E8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B1B28D8456900BC45E8 /* MainViewController.swift */; };
@@ -21,36 +14,10 @@
 		2C8B5B2128D8456B00BC45E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2028D8456B00BC45E8 /* Assets.xcassets */; };
 		2C8B5B2428D8456B00BC45E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2228D8456B00BC45E8 /* LaunchScreen.storyboard */; };
 		2C8B5B2C28D84D1A00BC45E8 /* SampleAuthConstants.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2B28D84D1A00BC45E8 /* SampleAuthConstants.plist */; };
-		2C8B5B2F28D84ECC00BC45E8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2E28D84ECC00BC45E8 /* Model.swift */; };
-		2C8B5B3128D84FE900BC45E8 /* MobileGatewayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3028D84FE900BC45E8 /* MobileGatewayService.swift */; };
-		2C8B5B3328D8501800BC45E8 /* MQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3228D8501800BC45E8 /* MQTTClient.swift */; };
-		2C8B5B3528D852D900BC45E8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3428D852D900BC45E8 /* NetworkService.swift */; };
-		2C8B5B3728D8531400BC45E8 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3628D8531400BC45E8 /* NetworkProtocols.swift */; };
-		2C8B5B3928D853A000BC45E8 /* GatewayTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3828D853A000BC45E8 /* GatewayTokens.swift */; };
-		2C8B5B3C28D85A9100BC45E8 /* TagPacketData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3A28D85A9100BC45E8 /* TagPacketData.swift */; };
-		2C8B5B3D28D85A9100BC45E8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3B28D85A9100BC45E8 /* Location.swift */; };
-		2C8B5B3F28D85B3100BC45E8 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B3E28D85B3100BC45E8 /* Errors.swift */; };
-		2C8B5B4228D85B5E00BC45E8 /* GatewayPacketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4028D85B5E00BC45E8 /* GatewayPacketsData.swift */; };
-		2C8B5B4328D85B5E00BC45E8 /* GatewayDataEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4128D85B5E00BC45E8 /* GatewayDataEncoder.swift */; };
-		2C8B5B4528D85BB600BC45E8 /* AccelerationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4428D85BB600BC45E8 /* AccelerationData.swift */; };
-		2C8B5B4728D85BDC00BC45E8 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4628D85BDC00BC45E8 /* Date+Extensions.swift */; };
-		2C8B5B4928D85E8A00BC45E8 /* BLEPacketsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4828D85E8A00BC45E8 /* BLEPacketsManager.swift */; };
-		2C8B5B4B28D85F0100BC45E8 /* MotionAccelerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4A28D85F0100BC45E8 /* MotionAccelerationService.swift */; };
-		2C8B5B4D28D8612000BC45E8 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4C28D8612000BC45E8 /* Permissions.swift */; };
-		2C8B5B4F28D866CB00BC45E8 /* BLEService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8B5B4E28D866CB00BC45E8 /* BLEService.swift */; };
-		32F9BF022A6946BE007FA5D4 /* CocoaMQTT in Frameworks */ = {isa = PBXBuildFile; productRef = 32F9BF012A6946BE007FA5D4 /* CocoaMQTT */; };
-		32F9BF042A6946BE007FA5D4 /* CocoaMQTTWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 32F9BF032A6946BE007FA5D4 /* CocoaMQTTWebSocket */; };
-		32F9BF072A6946D1007FA5D4 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 32F9BF062A6946D1007FA5D4 /* JWTDecode */; };
+		32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */ = {isa = PBXBuildFile; productRef = 32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C31500728D86BD5000A3183 /* BLEPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEPacket.swift; sourceTree = "<group>"; };
-		2C31500928D86C7A000A3183 /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
-		2C31500B28D89E88000A3183 /* LocationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
-		2C31500D28D89EF0000A3183 /* iBeacon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iBeacon.swift; sourceTree = "<group>"; };
-		2C31500F28D8AC3B000A3183 /* BeaconDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconDataReader.swift; sourceTree = "<group>"; };
-		2C31501128D8ACF8000A3183 /* PacketsPacingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketsPacingService.swift; sourceTree = "<group>"; };
-		2C31501328D8AD15000A3183 /* WeakObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakObject.swift; sourceTree = "<group>"; };
 		2C8B5B1428D8456900BC45E8 /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8B5B1728D8456900BC45E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C8B5B1928D8456900BC45E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,23 +27,7 @@
 		2C8B5B2328D8456B00BC45E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C8B5B2528D8456B00BC45E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C8B5B2B28D84D1A00BC45E8 /* SampleAuthConstants.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SampleAuthConstants.plist; sourceTree = "<group>"; };
-		2C8B5B2E28D84ECC00BC45E8 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		2C8B5B3028D84FE900BC45E8 /* MobileGatewayService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileGatewayService.swift; sourceTree = "<group>"; };
-		2C8B5B3228D8501800BC45E8 /* MQTTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MQTTClient.swift; sourceTree = "<group>"; };
-		2C8B5B3428D852D900BC45E8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		2C8B5B3628D8531400BC45E8 /* NetworkProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocols.swift; sourceTree = "<group>"; };
-		2C8B5B3828D853A000BC45E8 /* GatewayTokens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayTokens.swift; sourceTree = "<group>"; };
-		2C8B5B3A28D85A9100BC45E8 /* TagPacketData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagPacketData.swift; sourceTree = "<group>"; };
-		2C8B5B3B28D85A9100BC45E8 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		2C8B5B3E28D85B3100BC45E8 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		2C8B5B4028D85B5E00BC45E8 /* GatewayPacketsData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayPacketsData.swift; sourceTree = "<group>"; };
-		2C8B5B4128D85B5E00BC45E8 /* GatewayDataEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayDataEncoder.swift; sourceTree = "<group>"; };
-		2C8B5B4428D85BB600BC45E8 /* AccelerationData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccelerationData.swift; sourceTree = "<group>"; };
-		2C8B5B4628D85BDC00BC45E8 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
-		2C8B5B4828D85E8A00BC45E8 /* BLEPacketsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPacketsManager.swift; sourceTree = "<group>"; };
-		2C8B5B4A28D85F0100BC45E8 /* MotionAccelerationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionAccelerationService.swift; sourceTree = "<group>"; };
-		2C8B5B4C28D8612000BC45E8 /* Permissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
-		2C8B5B4E28D866CB00BC45E8 /* BLEService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEService.swift; sourceTree = "<group>"; };
+		32F9BF092A6950C4007FA5D4 /* WiliotGatewayBLEConnection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WiliotGatewayBLEConnection; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,9 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32F9BF042A6946BE007FA5D4 /* CocoaMQTTWebSocket in Frameworks */,
-				32F9BF022A6946BE007FA5D4 /* CocoaMQTT in Frameworks */,
-				32F9BF072A6946D1007FA5D4 /* JWTDecode in Frameworks */,
+				32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,8 +45,10 @@
 		2C8B5B0B28D8456900BC45E8 = {
 			isa = PBXGroup;
 			children = (
+				32F9BF092A6950C4007FA5D4 /* WiliotGatewayBLEConnection */,
 				2C8B5B1628D8456900BC45E8 /* SampleApp */,
 				2C8B5B1528D8456900BC45E8 /* Products */,
+				32F9BF0A2A695224007FA5D4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,7 +66,6 @@
 				2C8B5B1728D8456900BC45E8 /* AppDelegate.swift */,
 				2C8B5B1928D8456900BC45E8 /* SceneDelegate.swift */,
 				2C8B5B1B28D8456900BC45E8 /* MainViewController.swift */,
-				2C8B5B2D28D84DDA00BC45E8 /* Model */,
 				2C8B5B1D28D8456900BC45E8 /* Main.storyboard */,
 				2C8B5B2028D8456B00BC45E8 /* Assets.xcassets */,
 				2C8B5B2228D8456B00BC45E8 /* LaunchScreen.storyboard */,
@@ -125,67 +75,11 @@
 			path = SampleApp;
 			sourceTree = "<group>";
 		};
-		2C8B5B2D28D84DDA00BC45E8 /* Model */ = {
+		32F9BF0A2A695224007FA5D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C8B5B2E28D84ECC00BC45E8 /* Model.swift */,
-				2CC477DA28D9BFF000355A90 /* DataUpstream */,
-				2CC477DB28D9C01600355A90 /* BLEScanning */,
-				2CC477DD28D9C09B00355A90 /* AdditionalData */,
-				2CC477DC28D9C04500355A90 /* NetwworkAPICalls */,
-				2C8B5B4C28D8612000BC45E8 /* Permissions.swift */,
-				2C31500D28D89EF0000A3183 /* iBeacon.swift */,
-				2C8B5B3E28D85B3100BC45E8 /* Errors.swift */,
-				2C8B5B4628D85BDC00BC45E8 /* Date+Extensions.swift */,
-				2C31500928D86C7A000A3183 /* Data+Extension.swift */,
-				2C31501328D8AD15000A3183 /* WeakObject.swift */,
 			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		2CC477DA28D9BFF000355A90 /* DataUpstream */ = {
-			isa = PBXGroup;
-			children = (
-				2C8B5B3028D84FE900BC45E8 /* MobileGatewayService.swift */,
-				2C8B5B3228D8501800BC45E8 /* MQTTClient.swift */,
-				2C8B5B3A28D85A9100BC45E8 /* TagPacketData.swift */,
-				2C31501128D8ACF8000A3183 /* PacketsPacingService.swift */,
-				2C8B5B4028D85B5E00BC45E8 /* GatewayPacketsData.swift */,
-				2C8B5B4128D85B5E00BC45E8 /* GatewayDataEncoder.swift */,
-			);
-			path = DataUpstream;
-			sourceTree = "<group>";
-		};
-		2CC477DB28D9C01600355A90 /* BLEScanning */ = {
-			isa = PBXGroup;
-			children = (
-				2C8B5B4828D85E8A00BC45E8 /* BLEPacketsManager.swift */,
-				2C8B5B4E28D866CB00BC45E8 /* BLEService.swift */,
-				2C31500728D86BD5000A3183 /* BLEPacket.swift */,
-				2C31500F28D8AC3B000A3183 /* BeaconDataReader.swift */,
-			);
-			path = BLEScanning;
-			sourceTree = "<group>";
-		};
-		2CC477DC28D9C04500355A90 /* NetwworkAPICalls */ = {
-			isa = PBXGroup;
-			children = (
-				2C8B5B3628D8531400BC45E8 /* NetworkProtocols.swift */,
-				2C8B5B3428D852D900BC45E8 /* NetworkService.swift */,
-				2C8B5B3828D853A000BC45E8 /* GatewayTokens.swift */,
-			);
-			path = NetwworkAPICalls;
-			sourceTree = "<group>";
-		};
-		2CC477DD28D9C09B00355A90 /* AdditionalData */ = {
-			isa = PBXGroup;
-			children = (
-				2C8B5B4A28D85F0100BC45E8 /* MotionAccelerationService.swift */,
-				2C8B5B4428D85BB600BC45E8 /* AccelerationData.swift */,
-				2C31500B28D89E88000A3183 /* LocationService.swift */,
-				2C8B5B3B28D85A9100BC45E8 /* Location.swift */,
-			);
-			path = AdditionalData;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,9 +99,7 @@
 			);
 			name = SampleApp;
 			packageProductDependencies = (
-				32F9BF012A6946BE007FA5D4 /* CocoaMQTT */,
-				32F9BF032A6946BE007FA5D4 /* CocoaMQTTWebSocket */,
-				32F9BF062A6946D1007FA5D4 /* JWTDecode */,
+				32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */,
 			);
 			productName = SampleApp;
 			productReference = 2C8B5B1428D8456900BC45E8 /* SampleApp.app */;
@@ -238,8 +130,6 @@
 			);
 			mainGroup = 2C8B5B0B28D8456900BC45E8;
 			packageReferences = (
-				32F9BF002A6946BE007FA5D4 /* XCRemoteSwiftPackageReference "CocoaMQTT" */,
-				32F9BF052A6946D1007FA5D4 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
 			);
 			productRefGroup = 2C8B5B1528D8456900BC45E8 /* Products */;
 			projectDirPath = "";
@@ -269,33 +159,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C8B5B3328D8501800BC45E8 /* MQTTClient.swift in Sources */,
-				2C8B5B3D28D85A9100BC45E8 /* Location.swift in Sources */,
-				2C31501428D8AD15000A3183 /* WeakObject.swift in Sources */,
-				2C8B5B3728D8531400BC45E8 /* NetworkProtocols.swift in Sources */,
-				2C31500C28D89E88000A3183 /* LocationService.swift in Sources */,
-				2C8B5B3128D84FE900BC45E8 /* MobileGatewayService.swift in Sources */,
-				2C8B5B4228D85B5E00BC45E8 /* GatewayPacketsData.swift in Sources */,
-				2C8B5B3F28D85B3100BC45E8 /* Errors.swift in Sources */,
-				2C31501228D8ACF8000A3183 /* PacketsPacingService.swift in Sources */,
 				2C8B5B1C28D8456900BC45E8 /* MainViewController.swift in Sources */,
-				2C8B5B3C28D85A9100BC45E8 /* TagPacketData.swift in Sources */,
-				2C31501028D8AC3B000A3183 /* BeaconDataReader.swift in Sources */,
-				2C31500E28D89EF0000A3183 /* iBeacon.swift in Sources */,
-				2C31500828D86BD5000A3183 /* BLEPacket.swift in Sources */,
-				2C8B5B4928D85E8A00BC45E8 /* BLEPacketsManager.swift in Sources */,
-				2C8B5B4B28D85F0100BC45E8 /* MotionAccelerationService.swift in Sources */,
 				2C8B5B1828D8456900BC45E8 /* AppDelegate.swift in Sources */,
-				2C8B5B4F28D866CB00BC45E8 /* BLEService.swift in Sources */,
-				2C8B5B4728D85BDC00BC45E8 /* Date+Extensions.swift in Sources */,
-				2C8B5B4D28D8612000BC45E8 /* Permissions.swift in Sources */,
 				2C8B5B1A28D8456900BC45E8 /* SceneDelegate.swift in Sources */,
-				2C8B5B4528D85BB600BC45E8 /* AccelerationData.swift in Sources */,
-				2C8B5B3928D853A000BC45E8 /* GatewayTokens.swift in Sources */,
-				2C8B5B2F28D84ECC00BC45E8 /* Model.swift in Sources */,
-				2C31500A28D86C7A000A3183 /* Data+Extension.swift in Sources */,
-				2C8B5B3528D852D900BC45E8 /* NetworkService.swift in Sources */,
-				2C8B5B4328D85B5E00BC45E8 /* GatewayDataEncoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,40 +396,10 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		32F9BF002A6946BE007FA5D4 /* XCRemoteSwiftPackageReference "CocoaMQTT" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/emqx/CocoaMQTT.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-		32F9BF052A6946D1007FA5D4 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/auth0/JWTDecode.swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		32F9BF012A6946BE007FA5D4 /* CocoaMQTT */ = {
+		32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 32F9BF002A6946BE007FA5D4 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
-			productName = CocoaMQTT;
-		};
-		32F9BF032A6946BE007FA5D4 /* CocoaMQTTWebSocket */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 32F9BF002A6946BE007FA5D4 /* XCRemoteSwiftPackageReference "CocoaMQTT" */;
-			productName = CocoaMQTTWebSocket;
-		};
-		32F9BF062A6946D1007FA5D4 /* JWTDecode */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 32F9BF052A6946D1007FA5D4 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;
-			productName = JWTDecode;
+			productName = WiliotGatewayBLEConnection;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

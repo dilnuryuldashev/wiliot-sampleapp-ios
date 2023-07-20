@@ -6,7 +6,7 @@ private let kAPPTokenKey = "app_token"
 /// plist value reading key
 private let kOwnerIdKey = "owner_id"
 
-@objc class Model: NSObject {
+@objc public class Model: NSObject {
 
     lazy var permissions: Permissions = {
 
