@@ -37,8 +37,8 @@ private let kOwnerIdKey = "owner_id"
     private let _permissionsPublisher: PassthroughSubject<Bool, Never> = .init()
     private let _mqttSentMessagePublisher: PassthroughSubject<Void, Never> = .init()
 
-    private var appToken = ""
-    private var ownerId = ""
+    public var appToken = ""
+    public var ownerId = ""
     private var gatewayService: MobileGatewayService?
     private var bleService: BLEService?
     private var blePacketsmanager: BLEPacketsManager?
@@ -48,12 +48,12 @@ private let kOwnerIdKey = "owner_id"
     // MARK: -
     override init() {
         super.init()
-
-        do {
-            try tryReadRequiredUserData()
-        } catch {
-            _statusPublisher.send(error.localizedDescription)
-        }
+//
+//        do {
+//            try tryReadRequiredUserData()
+//        } catch {
+//            _statusPublisher.send(error.localizedDescription)
+//        }
     }
 
     func prepare(completion: @escaping (() -> Void)) {
@@ -107,38 +107,40 @@ private let kOwnerIdKey = "owner_id"
         startBLE()
     }
 
-    // MARK: - PRIVATE
-    private func tryReadRequiredUserData() throws {
+    // Commented out because we do not need to read it from this PLISt file.
+    //We need to read it from an external API
+//    // MARK: - PRIVATE
+//    private func tryReadRequiredUserData() throws {
+//
+//        guard let plistPath = Bundle.main.path(forResource: "SampleAuthConstants", ofType: "plist"),
+//              let dataXML = FileManager.default.contents(atPath: plistPath)else {
+//            throw ValueReadingError.missingRequiredValue("No required data found in app Bundle")
+//        }
+//
+//        do {
+//            var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml
+//            let anObject = try PropertyListSerialization.propertyList(from: dataXML, options: .mutableContainersAndLeaves, format: &propertyListFormat)
+//
+//            guard let values = anObject as? [String: String] else {
+//                throw ValueReadingError.missingRequiredValue("Wrong Required Data format.")
+//            }
+//
+//            guard let lvAppToken = values[kAPPTokenKey],
+//                  let lvOwnerId = values[kOwnerIdKey] else {
+//                throw ValueReadingError.missingRequiredValue("No APP Token or Owner ID")
+//            }
+//
+//            appToken = lvAppToken
+//            ownerId = lvOwnerId
+//            _statusPublisher.send("plist values present")
+//
+//        } catch let plistError {
+//            throw plistError
+//        }
+//
+//    }
 
-        guard let plistPath = Bundle.main.path(forResource: "SampleAuthConstants", ofType: "plist"),
-              let dataXML = FileManager.default.contents(atPath: plistPath)else {
-            throw ValueReadingError.missingRequiredValue("No required data found in app Bundle")
-        }
-
-        do {
-            var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml
-            let anObject = try PropertyListSerialization.propertyList(from: dataXML, options: .mutableContainersAndLeaves, format: &propertyListFormat)
-
-            guard let values = anObject as? [String: String] else {
-                throw ValueReadingError.missingRequiredValue("Wrong Required Data format.")
-            }
-
-            guard let lvAppToken = values[kAPPTokenKey],
-                  let lvOwnerId = values[kOwnerIdKey] else {
-                throw ValueReadingError.missingRequiredValue("No APP Token or Owner ID")
-            }
-
-            appToken = lvAppToken
-            ownerId = lvOwnerId
-            _statusPublisher.send("plist values present")
-
-        } catch let plistError {
-            throw plistError
-        }
-
-    }
-
-    func checkAndRequestSystemPermissions() {
+    public func checkAndRequestSystemPermissions() {
         if !permissions.gatewayPermissionsGranted {
 
             self.permissionsCompletionCancellable =
