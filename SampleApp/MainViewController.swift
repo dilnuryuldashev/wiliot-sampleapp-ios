@@ -23,10 +23,12 @@ class MainViewController: UIViewController {
         WiliotGatewayBLEConnection.initialize(appToken: appToken, ownerID: ownerID)
 
         if true {
-            
-            WiliotGatewayBLEConnection.observeStatusChanges { [weak self] statusString in
-                    self?.statusLabel?.text = statusString
-                }
+
+            WiliotGatewayBLEConnection.observeStatusChanges()
+                        .sink(receiveValue: { statusString in
+                            // Handle the received statusString
+                            print("Received status: \(statusString)")
+                        }).store(in: &cancellables)
             
             WiliotGatewayBLEConnection.connectionPublisher
                 .sink { [weak self] isConnected in

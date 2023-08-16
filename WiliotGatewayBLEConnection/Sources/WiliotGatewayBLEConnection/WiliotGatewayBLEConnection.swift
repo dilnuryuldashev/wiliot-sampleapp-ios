@@ -4,7 +4,7 @@ import Foundation
 public class WiliotGatewayBLEConnection {
     
     private static var model: Model = Model()
-    private static var cancellables: Set<AnyCancellable> = []
+    public static var cancellables: Set<AnyCancellable> = []
     
     // We are using hardcoded values for now
     public static func initialize(appToken: String, ownerID: String) {
@@ -31,14 +31,12 @@ public class WiliotGatewayBLEConnection {
     }
 
     
-    public static func observeStatusChanges(completion: @escaping (String) -> Void) {
-        model.statusPublisher
+    public static func observeStatusChanges() -> AnyPublisher<String, Never> {
+        return model.statusPublisher
             .receive(on: DispatchQueue.main)
-            .sink { statusString in
-                completion(statusString)
-            }
-            .store(in: &cancellables)
+            .eraseToAnyPublisher()
     }
+
     
     public static func subscribeToMessageSentAction(completion: @escaping () -> Void) {
         model.messageSentActionPubliosher
