@@ -12,6 +12,12 @@ public class WiliotGatewayBLEConnection {
         model.ownerId = ownerID
     }
     
+    public static func cancelAllSubscriptions() {
+            WiliotGatewayBLEConnection.cancellables.forEach { cancellable in
+                cancellable.cancel()
+            }
+        }
+    
     public static func completionLogMessage(status: Bool, message: String) {
         print("Completion message:\n + Status: \(status)\n + Message: \(message)")
     }

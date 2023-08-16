@@ -55,3 +55,8 @@ public func subscribeToMessageSent() {
             print("sent Tags Info at: \(Date())")
         }
 }
+
+@_cdecl("cancelAllSubscriptions")
+public func cancelAllSubscriptions() {
+    WiliotGatewayBLEConnection.cancelAllSubscriptions()
+}
