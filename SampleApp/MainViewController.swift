@@ -8,9 +8,6 @@ import WiliotGatewayBLEConnection
 
 class MainViewController: UIViewController {
 
-    private var api: WiliotGatewayBLEConnection!
-
-
     @IBOutlet weak var bluetoothIcon: UIImageView?
     @IBOutlet weak var networkIconIcon: UIImageView?
     @IBOutlet weak var statusLabel: UILabel?
@@ -23,22 +20,22 @@ class MainViewController: UIViewController {
         // as the main aim of this app is to act as a Unity plugin.
         let appToken = "NDZmNTc3ODItYzg1NC00ZGM2LTk5NzctMzdlZWMyZDgzZTVmOkR5VHNJV2JzeXJwWW9Ic0hUcjFMSHpGZVRaVG14RTh2cmU3dGFNZ21oRlk="
         let ownerID = "947302316108"
-        api = WiliotGatewayBLEConnection(appToken: appToken, ownerID: ownerID)
+        WiliotGatewayBLEConnection.initialize(appToken: appToken, ownerID: ownerID)
 
-        if api != nil {
+        if true {
             
-            api.observeStatusChanges { [weak self] statusString in
+            WiliotGatewayBLEConnection.observeStatusChanges { [weak self] statusString in
                     self?.statusLabel?.text = statusString
                 }
             
-            api.connectionPublisher
+            WiliotGatewayBLEConnection.connectionPublisher
                 .sink { [weak self] isConnected in
                     self?.handleConnectionStatus(isConnected)
                 }
                 .store(in: &cancellables)
             
 
-            api.bleActivityPublisher()
+            WiliotGatewayBLEConnection.bleActivityPublisher()
                 .sink { [weak self] floatValue in
                     self?.handleBLEactivityValue(floatValue)
                 }
@@ -46,7 +43,7 @@ class MainViewController: UIViewController {
 
             
             // Request system permissions using the exposed function
-            api.checkAndRequestSystemPermissions { (granted, message) in
+            WiliotGatewayBLEConnection.checkAndRequestSystemPermissions { (granted, message) in
                 // Handle the result of the permission request
                 if granted {
                     // Permissions granted, handle accordingly
@@ -57,7 +54,7 @@ class MainViewController: UIViewController {
                 }
             }
             
-            api.subscribeToMessageSentAction { [weak self] in
+            WiliotGatewayBLEConnection.subscribeToMessageSentAction { [weak self] in
                     self?.blinkNetworkingIcon()
                 }
         }
@@ -67,7 +64,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        api.checkAndRequestSystemPermissions()
+        WiliotGatewayBLEConnection.checkAndRequestSystemPermissions()
     }
 
     override func viewDidAppear(_ animated: Bool) {
