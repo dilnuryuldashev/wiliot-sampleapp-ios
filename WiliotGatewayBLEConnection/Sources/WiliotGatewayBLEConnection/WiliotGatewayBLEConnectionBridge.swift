@@ -40,7 +40,14 @@ public func bleActivityPublisher() {
 @_cdecl("checkAndRequestSystemPermissions")
 public func checkAndRequestSystemPermissions() {
     // Request system permissions using the exposed function
-    WiliotGatewayBLEConnection.checkAndRequestSystemPermissions { (granted, message) in
+    WiliotGatewayBLEConnection.checkAndRequestSystemPermissions();
+}
+
+
+@_cdecl("subscribeToPermissionUpdates")
+public func subscribeToPermissionUpdates() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.subscribeToPermissionUpdates { (granted, message) in
         // Handle the result of the permission request
         if granted {
             // Permissions granted, handle accordingly

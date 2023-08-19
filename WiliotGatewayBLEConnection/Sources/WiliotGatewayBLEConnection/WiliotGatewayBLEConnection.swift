@@ -54,15 +54,17 @@ public class WiliotGatewayBLEConnection {
     }
 
     
-    public static func checkAndRequestSystemPermissions(completion: @escaping (Bool, String) -> Void) {
-        WiliotGatewayBLEConnection.model.permissionsPublisher
-            .receive(on: DispatchQueue.main)
+    public static func subscribeToPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
+        print("Calling subscribeToPermissionUpdates")
+        model.permissionsPublisher
             .sink { granted in
                 if granted {
                     connectToGatewayService(completion: completionLogMessage)
+                    print("subscribeToPermissionUpdates: Permissions granted.")
                     completion(true, "Permissions granted.")
                 } else {
                     completion(false, "Permissions not granted.")
+                    print("subscribeToPermissionUpdates: Permissions NOT granted.")
                 }
             }
             .store(in: &WiliotGatewayBLEConnection.cancellables)

@@ -45,7 +45,7 @@ class MainViewController: UIViewController {
 
             
             // Request system permissions using the exposed function
-            WiliotGatewayBLEConnection.checkAndRequestSystemPermissions { (granted, message) in
+            WiliotGatewayBLEConnection.subscribeToPermissionUpdates { (granted, message) in
                 // Handle the result of the permission request
                 if granted {
                     // Permissions granted, handle accordingly

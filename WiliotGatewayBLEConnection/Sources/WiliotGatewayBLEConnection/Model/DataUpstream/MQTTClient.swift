@@ -1,6 +1,6 @@
 import Foundation
-import CocoaMQTT
-import JWTDecode
+@_implementationOnly import CocoaMQTT
+@_implementationOnly import JWTDecode
 
 public struct MQTTEndpoint {
     let host: String
