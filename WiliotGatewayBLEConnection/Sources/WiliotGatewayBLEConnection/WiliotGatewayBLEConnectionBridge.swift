@@ -1,11 +1,10 @@
 import Foundation
 
-//old function def: public func initialize(appToken: String, ownerID: String)
 @_cdecl("initialize")
-public func initialize() {
-    let appToken = "MmE1NjQ0MDctMmQ5Yy00NWJjLTk2MzktNjE1ZjUzM2QxZjBiOkxZU2ZIc0pzQjJiNG8yVS1oNTlBM1h1VGUtd3ZFY3A5SGgtZnpQaHB0TnM=" //"NDZmNTc3ODItYzg1NC00ZGM2LTk5NzctMzdlZWMyZDgzZTVmOkR5VHNJV2JzeXJwWW9Ic0hUcjFMSHpGZVRaVG14RTh2cmU3dGFNZ21oRlk="
-    let ownerID = "201409513381"//"947302316108"
-    WiliotGatewayBLEConnection.initialize(appToken: appToken, ownerID: ownerID)
+public func initialize(appToken: UnsafePointer<CChar>?, ownerID: UnsafePointer<CChar>?) {
+    let token = String(cString: appToken!)
+    let id = String(cString: ownerID!)
+    WiliotGatewayBLEConnection.initialize(appToken: token, ownerID: id)
 }
 
 @_cdecl("observeStatusChanges")
