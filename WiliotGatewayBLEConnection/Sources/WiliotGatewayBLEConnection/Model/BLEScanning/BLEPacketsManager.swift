@@ -78,8 +78,29 @@ class BLEPacketsManager {
         if let clLocaton = locationService.lastLocation {
             location = Location(latitude: clLocaton.coordinate.latitude, longtitude: clLocaton.coordinate.longitude)
         }
+        
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
-
+        if let payloadJSONString = createPayloadJSONString(payloadValue: payloadStr) {
+            // Use the payloadJSONString as needed, like sending it in a network request
+            //print("payload string: \(payloadJSONString)")
+            sendPacketsToLivingweb(payloadString: payloadJSONString) { externalId, error in
+                if let externalId = externalId {
+                    //print("External ID: \(externalId)")
+                    if externalId == "unknown" {
+                            // Handle the case when externalId is "unknown"
+                            //print("External ID is unknown")
+                        } else {
+                            // Handle the case when externalId is a valid value
+                            print("Resolve API Asset ID: \(externalId)")
+                        }
+                } else if let error = error {
+                    print("Error: \(error)")
+                } else {
+                    print("Unknown error occurred.")
+                }
+            }
+        }
+        
         let bleUUID = blePacket.uid
 
         let packet = TagPacketData(payload: payloadStr,
@@ -94,4 +115,6 @@ class BLEPacketsManager {
 
         pacingReceiver?.receivePacketsByUUID([bleUUID: packet])
     }
+    
+
 }
