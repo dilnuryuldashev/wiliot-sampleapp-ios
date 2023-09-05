@@ -13,8 +13,6 @@ class BLEPacketsManager: NSObject {
         return service
     }()
     
-    public static var tagIDResolved: ((UnsafePointer<CChar>, Int) -> Void)?
-
     private lazy var locationService: LocationService = LocationService()
 
     var pacingReceiver: PacketsPacing?
@@ -23,6 +21,8 @@ class BLEPacketsManager: NSObject {
         self.pacingReceiver = pacingReceiver
     }
     
+    // We talk to Resolve API to resolve Bluetooth packets into tag IDs
+    let resolveAPI: ResolveAPI = ResolveAPI()
 
     func subscribeToBLEpacketsPublisher(publisher: AnyPublisher<BLEPacket, Never>) {
         publisher.sink {[weak self] packet in
@@ -75,16 +75,8 @@ class BLEPacketsManager: NSObject {
         handlePixelPacket(packet)
     }
 
-    //@objc
-    func sendMessageToUnity(message: String) {
-        let cString = message.cString(using: .utf8)
-        let length = message.count
-
-        BLEPacketsManager.tagIDResolved!(cString!, length)
-    }
-    
     private func handlePixelPacket(_ blePacket: BLEPacket) {
-//        print("BLEPacketsManager: \(blePacket.data.hexEncodedString(options: .upperCase)) - from - \(blePacket.uid.uuidString)")
+        // print("BLEPacketsManager: \(blePacket.data.hexEncodedString(options: .upperCase)) - from - \(blePacket.uid.uuidString)")
 
         let accelerationData = self.accelerationService.currentAcceleration
         var location: Location?
@@ -93,19 +85,24 @@ class BLEPacketsManager: NSObject {
         }
         
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
-        if let payloadJSONString = createPayloadJSONString(payloadValue: payloadStr) {
+        
+        // We create a short JSON string containing the packet ID
+        // Then, we send it over to the Resolve API
+        // When we get a resoled tag ID, we publish it
+        // to the listeners of ResolveAPI.tagIDResolved
+        if let payloadJSONString = resolveAPI.createPayloadJSONString(payloadValue: payloadStr) {
             // Use the payloadJSONString as needed, like sending it in a network request
-            sendPacketsToLivingweb(payloadString: payloadJSONString) { externalId, error in
+            resolveAPI.sendPacketToResolveAPI(payloadString: payloadJSONString) { externalId, error in
                 if let externalId = externalId {
-                    //print("External ID: \(externalId)")
-                    if externalId == "unknown" {
-                            // Handle the case when externalId is "unknown"
-                            print("External ID is unknown")
-                        } else {
-                            print("Resolve API Asset ID: \(externalId)")
-                            //let assetId = String(externalId.suffix(9))
-                            self.sendMessageToUnity(message: externalId)
-                        }
+                    // Resolve API returns unknown
+                    // if the packet was not resolved
+                    // If it was, we get back a tag ID
+                    if externalId != "unknown" {
+                        // We can print the returned ID for debugging purposes
+                        // Or we can take its value use it for other purposes such as below
+                        // where we publish ti to the listeners of ResolveAPI.tagIDResolved
+                        self.resolveAPI.publishResolvedTagId(message: externalId)
+                    }
                 } else if let error = error {
                     print("Error: \(error)")
                 } else {
@@ -128,6 +125,4 @@ class BLEPacketsManager: NSObject {
 
         pacingReceiver?.receivePacketsByUUID([bleUUID: packet])
     }
-    
-
 }

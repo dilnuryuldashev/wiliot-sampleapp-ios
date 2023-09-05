@@ -5,7 +5,6 @@ public class WiliotGatewayBLEConnection {
     
     private static var model: Model = Model()
     public static var cancellables: Set<AnyCancellable> = []
- //   public static var tagIDResolved: ((String) -> Void)?
 
     // We are using hardcoded values for now
     public static func initialize(appToken: String, ownerID: String) {
@@ -23,13 +22,11 @@ public class WiliotGatewayBLEConnection {
         print("Completion message:\n + Status: \(status)\n + Message: \(message)")
     }
     
-    
     public static var connectionPublisher: AnyPublisher<Bool, Never> {
         model.connectionPublisher
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
     
     public static func bleActivityPublisher() -> AnyPublisher<Float, Never> {
         model.bleActivityPublisher
@@ -37,14 +34,12 @@ public class WiliotGatewayBLEConnection {
             .eraseToAnyPublisher()
     }
 
-    
     public static func observeStatusChanges() -> AnyPublisher<String, Never> {
         return model.statusPublisher
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
-    
     public static func subscribeToMessageSentAction(completion: @escaping () -> Void) {
         model.messageSentActionPubliosher
             .receive(on: DispatchQueue.main)
@@ -54,7 +49,6 @@ public class WiliotGatewayBLEConnection {
             .store(in: &cancellables)
     }
 
-    
     public static func subscribeToPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
         print("Calling subscribeToPermissionUpdates")
         model.permissionsPublisher
@@ -71,7 +65,6 @@ public class WiliotGatewayBLEConnection {
             .store(in: &WiliotGatewayBLEConnection.cancellables)
     }
 
-
     public static func connectToGatewayService(completion: @escaping (Bool, String) -> Void) {
         model.prepare {
             guard self.model.canStart() else {
@@ -83,8 +76,6 @@ public class WiliotGatewayBLEConnection {
         }
     }
     
-
-
     public static func checkAndRequestSystemPermissions() {
         model.checkAndRequestSystemPermissions()
         // Handle the completion of permission requests and return the result to MainViewController.swift
