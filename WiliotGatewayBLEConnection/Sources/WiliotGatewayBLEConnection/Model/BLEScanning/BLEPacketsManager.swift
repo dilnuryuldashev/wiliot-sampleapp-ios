@@ -3,14 +3,17 @@
 
 import Foundation
 import Combine
+import UIKit
 
-class BLEPacketsManager {
+class BLEPacketsManager: NSObject {
     private var cancellables: Set<AnyCancellable> = []
 
     private lazy var accelerationService: MotionAccelerationService = {
         let service = MotionAccelerationService(accelerationUpdateInterval: 1.0)
         return service
     }()
+    
+    public static var tagIDResolved: ((Double) -> Void)?
 
     private lazy var locationService: LocationService = LocationService()
 
@@ -19,6 +22,7 @@ class BLEPacketsManager {
     init(pacingReceiver: PacketsPacing?) {
         self.pacingReceiver = pacingReceiver
     }
+    
 
     func subscribeToBLEpacketsPublisher(publisher: AnyPublisher<BLEPacket, Never>) {
         publisher.sink {[weak self] packet in
@@ -30,6 +34,7 @@ class BLEPacketsManager {
         tryToStartAccelerometerUpdates()
         startLocationService()
     }
+    
     // MARK: - Setup
     private func tryToStartAccelerometerUpdates() {
         do {
@@ -70,6 +75,12 @@ class BLEPacketsManager {
         handlePixelPacket(packet)
     }
 
+    @objc
+    func sendMessageToUnity() {
+        BLEPacketsManager.tagIDResolved!(5.0)
+
+    }
+    
     private func handlePixelPacket(_ blePacket: BLEPacket) {
 //        print("BLEPacketsManager: \(blePacket.data.hexEncodedString(options: .upperCase)) - from - \(blePacket.uid.uuidString)")
 
@@ -82,16 +93,16 @@ class BLEPacketsManager {
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
         if let payloadJSONString = createPayloadJSONString(payloadValue: payloadStr) {
             // Use the payloadJSONString as needed, like sending it in a network request
-            //print("payload string: \(payloadJSONString)")
             sendPacketsToLivingweb(payloadString: payloadJSONString) { externalId, error in
                 if let externalId = externalId {
                     //print("External ID: \(externalId)")
                     if externalId == "unknown" {
                             // Handle the case when externalId is "unknown"
-                            //print("External ID is unknown")
+                            print("External ID is unknown")
                         } else {
-                            // Handle the case when externalId is a valid value
                             print("Resolve API Asset ID: \(externalId)")
+                            //let assetId = String(externalId.suffix(9))
+                            self.sendMessageToUnity()
                         }
                 } else if let error = error {
                     print("Error: \(error)")

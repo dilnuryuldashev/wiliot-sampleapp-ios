@@ -1,14 +1,8 @@
-//
-//  File.swift
-//  
-//
-//  Created by Dilnur Yuldashev on 24.08.2023.
-//
-
 import Foundation
 
 let host = "https://resolver.livingweb.app"
 let authorizationString = "Bearer 3|J8b7mUpgFVoYrTlGvKb4oo6Oogabl1mpFvU5Y367"
+
 
 struct ResolveResult: Codable {
     let timestamp: Int

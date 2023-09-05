@@ -5,7 +5,8 @@ public class WiliotGatewayBLEConnection {
     
     private static var model: Model = Model()
     public static var cancellables: Set<AnyCancellable> = []
-    
+ //   public static var tagIDResolved: ((String) -> Void)?
+
     // We are using hardcoded values for now
     public static func initialize(appToken: String, ownerID: String) {
         model.appToken = appToken

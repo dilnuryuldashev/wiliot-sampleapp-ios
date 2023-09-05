@@ -69,3 +69,9 @@ public func subscribeToMessageSent() {
 public func cancelAllSubscriptions() {
     WiliotGatewayBLEConnection.cancelAllSubscriptions()
 }
+
+
+@_cdecl("tagIDResolved")
+public func tagIDResolved(tagIDResolvedDelegate: @convention(c) @escaping (Double) -> Void) {
+    BLEPacketsManager.tagIDResolved = tagIDResolvedDelegate
+}
