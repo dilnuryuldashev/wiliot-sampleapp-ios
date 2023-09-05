@@ -13,7 +13,7 @@ class BLEPacketsManager: NSObject {
         return service
     }()
     
-    public static var tagIDResolved: ((Double) -> Void)?
+    public static var tagIDResolved: ((UnsafePointer<CChar>, Int) -> Void)?
 
     private lazy var locationService: LocationService = LocationService()
 
@@ -75,10 +75,12 @@ class BLEPacketsManager: NSObject {
         handlePixelPacket(packet)
     }
 
-    @objc
-    func sendMessageToUnity() {
-        BLEPacketsManager.tagIDResolved!(5.0)
+    //@objc
+    func sendMessageToUnity(message: String) {
+        let cString = message.cString(using: .utf8)
+        let length = message.count
 
+        BLEPacketsManager.tagIDResolved!(cString!, length)
     }
     
     private func handlePixelPacket(_ blePacket: BLEPacket) {
@@ -102,7 +104,7 @@ class BLEPacketsManager: NSObject {
                         } else {
                             print("Resolve API Asset ID: \(externalId)")
                             //let assetId = String(externalId.suffix(9))
-                            self.sendMessageToUnity()
+                            self.sendMessageToUnity(message: externalId)
                         }
                 } else if let error = error {
                     print("Error: \(error)")

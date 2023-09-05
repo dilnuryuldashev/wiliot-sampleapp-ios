@@ -72,6 +72,6 @@ public func cancelAllSubscriptions() {
 
 
 @_cdecl("tagIDResolved")
-public func tagIDResolved(tagIDResolvedDelegate: @convention(c) @escaping (Double) -> Void) {
+public func tagIDResolved(tagIDResolvedDelegate: @convention(c) @escaping (UnsafePointer<CChar>, Int) -> Void) {
     BLEPacketsManager.tagIDResolved = tagIDResolvedDelegate
 }
