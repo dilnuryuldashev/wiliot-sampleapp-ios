@@ -48,12 +48,6 @@ private let kOwnerIdKey = "owner_id"
     // MARK: -
     override init() {
         super.init()
-//
-//        do {
-//            try tryReadRequiredUserData()
-//        } catch {
-//            _statusPublisher.send(error.localizedDescription)
-//        }
     }
 
     func prepare(completion: @escaping (() -> Void)) {
@@ -107,39 +101,6 @@ private let kOwnerIdKey = "owner_id"
         startBLE()
     }
 
-    // Commented out because we do not need to read it from this PLISt file.
-    //We need to read it from an external API
-//    // MARK: - PRIVATE
-//    private func tryReadRequiredUserData() throws {
-//
-//        guard let plistPath = Bundle.main.path(forResource: "SampleAuthConstants", ofType: "plist"),
-//              let dataXML = FileManager.default.contents(atPath: plistPath)else {
-//            throw ValueReadingError.missingRequiredValue("No required data found in app Bundle")
-//        }
-//
-//        do {
-//            var propertyListFormat =  PropertyListSerialization.PropertyListFormat.xml
-//            let anObject = try PropertyListSerialization.propertyList(from: dataXML, options: .mutableContainersAndLeaves, format: &propertyListFormat)
-//
-//            guard let values = anObject as? [String: String] else {
-//                throw ValueReadingError.missingRequiredValue("Wrong Required Data format.")
-//            }
-//
-//            guard let lvAppToken = values[kAPPTokenKey],
-//                  let lvOwnerId = values[kOwnerIdKey] else {
-//                throw ValueReadingError.missingRequiredValue("No APP Token or Owner ID")
-//            }
-//
-//            appToken = lvAppToken
-//            ownerId = lvOwnerId
-//            _statusPublisher.send("plist values present")
-//
-//        } catch let plistError {
-//            throw plistError
-//        }
-//
-//    }
-
     public func checkAndRequestSystemPermissions() {
         if !permissions.gatewayPermissionsGranted {
 
@@ -147,7 +108,11 @@ private let kOwnerIdKey = "owner_id"
             permissions.$gatewayPermissionsGranted
                 .sink {[weak self] granted in
                     if let weakSelf = self {
-                        weakSelf.permissionsCompletionCancellable = nil
+                        // We listen until all permissions are granted: bluetooth & location
+                        // Setting the cancellable to nil will cancel the subscription
+                        if granted {
+                            weakSelf.permissionsCompletionCancellable = nil
+                        }
                         weakSelf.handlePermissionsRequestsCompletion(granted)
                     }
 
