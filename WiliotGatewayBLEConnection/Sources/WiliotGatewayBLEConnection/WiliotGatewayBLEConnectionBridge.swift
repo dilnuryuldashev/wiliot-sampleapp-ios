@@ -20,9 +20,11 @@ public func connectionPublisher() {
     // Call the connectionPublisher method and handle the received value
     WiliotGatewayBLEConnection.connectionPublisher.sink { isConnected in
         if isConnected {
-            print("Connected")
+            WiliotGatewayBLEConnection.gatewayConnectionEstablished!(true)
+            print("Gateway Connected")
         } else {
-            print("Not connected")
+            WiliotGatewayBLEConnection.gatewayConnectionEstablished!(false)
+            print("Gateway not connected")
         }
     }.store(in: &WiliotGatewayBLEConnection.cancellables)
 }
@@ -33,6 +35,16 @@ public func bleActivityPublisher() {
     WiliotGatewayBLEConnection.bleActivityPublisher().sink { floatValue in
         // Process the received value
         print("Received ble activity value: \(floatValue)")
+        
+        if floatValue > 0 {
+            // Successfull Bluetooth connection
+            print("Bluetooth Connected")
+            WiliotGatewayBLEConnection.bluetoothConnectionEstablished!(true)
+        } else {
+            // Not connected
+            print("Bluetooth Not Connected")
+            WiliotGatewayBLEConnection.bluetoothConnectionEstablished!(false)
+        }
     }.store(in: &WiliotGatewayBLEConnection.cancellables)
 }
 
@@ -51,9 +63,11 @@ public func subscribeToPermissionUpdates() {
         if granted {
             // Permissions granted, handle accordingly
             print("Permission granted")
+            WiliotGatewayBLEConnection.systemPermissionsGranted!(true)
         } else {
             // Permissions not granted, handle accordingly
             print("Permission not granted")
+            WiliotGatewayBLEConnection.systemPermissionsGranted!(false)
         }
     }
 }
@@ -73,4 +87,19 @@ public func cancelAllSubscriptions() {
 @_cdecl("tagIDResolved")
 public func tagIDResolved(tagIDResolvedDelegate: @convention(c) @escaping (UnsafePointer<CChar>, Int) -> Void) {
     ResolveAPI.tagIDResolved = tagIDResolvedDelegate
+}
+
+@_cdecl("bluetoothConnectionEstablished")
+public func bluetoothConnectionEstablished(bluetoothConnectionEstablishedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.bluetoothConnectionEstablished = bluetoothConnectionEstablishedDelegate
+}
+
+@_cdecl("gatewayConnectionEstablished")
+public func gatewayConnectionEstablished(gatewayConnectionEstablishedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.gatewayConnectionEstablished = gatewayConnectionEstablishedDelegate
+}
+
+@_cdecl("systemPermissionsGranted")
+public func systemPermissionsGranted(systemPermissionsGrantedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.systemPermissionsGranted = systemPermissionsGrantedDelegate
 }

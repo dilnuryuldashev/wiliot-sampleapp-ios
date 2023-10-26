@@ -5,6 +5,10 @@ public class WiliotGatewayBLEConnection {
     
     private static var model: Model = Model()
     public static var cancellables: Set<AnyCancellable> = []
+    public static var bluetoothConnectionEstablished: ((Bool) -> Void)?
+    public static var gatewayConnectionEstablished: ((Bool) -> Void)?
+    public static var systemPermissionsGranted: ((Bool) -> Void)?
+
 
     // We are using hardcoded values for now
     public static func initialize(appToken: String, ownerID: String) {
@@ -13,10 +17,10 @@ public class WiliotGatewayBLEConnection {
     }
     
     public static func cancelAllSubscriptions() {
-            WiliotGatewayBLEConnection.cancellables.forEach { cancellable in
-                cancellable.cancel()
-            }
+        WiliotGatewayBLEConnection.cancellables.forEach { cancellable in
+            cancellable.cancel()
         }
+    }
     
     public static func completionLogMessage(status: Bool, message: String) {
         print("Completion message:\n + Status: \(status)\n + Message: \(message)")
@@ -80,6 +84,6 @@ public class WiliotGatewayBLEConnection {
         model.checkAndRequestSystemPermissions()
         // Handle the completion of permission requests and return the result to MainViewController.swift
         // For simplicity, in this example, we are returning "granted" directly.
-        //completion(true, "Permissions granted.")
+        // completion(true, "Permissions granted.")
     }
 }
