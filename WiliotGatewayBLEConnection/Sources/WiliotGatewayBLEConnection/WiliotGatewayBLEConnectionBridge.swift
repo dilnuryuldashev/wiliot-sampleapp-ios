@@ -7,6 +7,11 @@ public func initialize(appToken: UnsafePointer<CChar>?, ownerID: UnsafePointer<C
     WiliotGatewayBLEConnection.initialize(appToken: token, ownerID: id)
 }
 
+@_cdecl("openAppSettings")
+public func openAppSettings() {
+    WiliotGatewayBLEConnection.openAppSettings()
+}
+
 @_cdecl("observeStatusChanges")
 public func observeStatusChanges() {
     WiliotGatewayBLEConnection.observeStatusChanges().sink { statusString in

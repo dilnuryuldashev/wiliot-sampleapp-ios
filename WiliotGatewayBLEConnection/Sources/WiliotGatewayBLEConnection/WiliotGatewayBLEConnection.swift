@@ -1,4 +1,5 @@
 import Combine
+import UIKit
 import Foundation
 
 public class WiliotGatewayBLEConnection {
@@ -9,7 +10,16 @@ public class WiliotGatewayBLEConnection {
     public static var gatewayConnectionEstablished: ((Bool) -> Void)?
     public static var systemPermissionsGranted: ((Bool) -> Void)?
 
-
+    // Open the app settings to see what the app has access to
+    // And to enable/disable those permissions
+    public static func openAppSettings() {
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(settingsURL) {
+                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
     // We are using hardcoded values for now
     public static func initialize(appToken: String, ownerID: String) {
         model.appToken = appToken
