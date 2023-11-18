@@ -77,6 +77,21 @@ public func subscribeToPermissionUpdates() {
     }
 }
 
+@_cdecl("connectToGatewayService")
+public func connectToGatewayService() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.connectToGatewayService { (granted, message) in
+        // Handle the result of the permission request
+        if granted {
+            // Permissions granted, handle accordingly
+            print("Gateway Connection Established")
+        } else {
+            // Permissions not granted, handle accordingly
+            print("Gateway Connection NOT Established")
+        }
+    }
+}
+
 @_cdecl("subscribeToMessageSent")
 public func subscribeToMessageSent() {
     WiliotGatewayBLEConnection.subscribeToMessageSentAction {

@@ -186,6 +186,7 @@ private let kOwnerIdKey = "owner_id"
 
         bleService.setScanningMode(inBackground: false)
         bleService.startListeningBroadcasts()
+        gatewayService?.setBLEPacketsManager(blePacketsmanager)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {[unowned self] in
             _bleScannerPublisher.send(0.5)
         }

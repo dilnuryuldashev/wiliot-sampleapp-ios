@@ -13,7 +13,7 @@ class BLEPacketsManager: NSObject {
         return service
     }()
     
-    private lazy var locationService: LocationService = LocationService()
+    lazy var locationService: LocationService = LocationService()
 
     var pacingReceiver: PacketsPacing?
 

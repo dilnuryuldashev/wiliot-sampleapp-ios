@@ -31,6 +31,7 @@ class MobileGatewayService {
     private var mqttClient: MQTTClient?
     private let gatewayRegistrator: GatewayRegistrator
     private let authTokenRequester: AuthTokenRequester
+    private var blePacketsManager: BLEPacketsManager?
 
     private enum Topic: String {
         case data
@@ -41,11 +42,14 @@ class MobileGatewayService {
     // MARK: - Init
 
     init(ownerId: String, authTokenRequester: AuthTokenRequester, gatewayRegistrator: GatewayRegistrator) {
-
         self.currentOwnerId = ownerId
-
         self.gatewayRegistrator = gatewayRegistrator
         self.authTokenRequester = authTokenRequester
+    }
+    
+    func setBLEPacketsManager(_ manager: BLEPacketsManager?) {
+        print("MobileGatewayService: Setting blePacketsManager after its initialization")
+        blePacketsManager = manager
     }
 
     deinit {
@@ -164,8 +168,15 @@ extension MobileGatewayService: TagPacketsSender {
             guard let topicToPublish = getTopicString(topic: .data) else {
                 return
             }
+        
+        // Get the current location from BLEPacketsManager
+        if let currentCLLocation = blePacketsManager?.locationService.lastLocation {
+            // Convert CLLocation to Location
+            let currentLocation = Location(latitude: currentCLLocation.coordinate.latitude,
+                                           longtitude: currentCLLocation.coordinate.longitude)
 
-            let gatewayPacketsData = GatewayPacketsData(location: nil, packets: info)
+            // Create GatewayPacketsData with location and packets information
+            let gatewayPacketsData = GatewayPacketsData(location: currentLocation, packets: info)
 
             do {
                 let messageData = try GatewayDataEncoder.encode(gatewayPacketsData)
@@ -187,6 +198,11 @@ extension MobileGatewayService: TagPacketsSender {
             } catch {
                 print("MobileGatewayService sendPacketsInfo. Error sending message:\(error)")
             }
+        } else {
+            // Handle the case when location is nil
+            print("MobileGatewayService: Location is nil.")
+        }
+            
         }
 }
 
