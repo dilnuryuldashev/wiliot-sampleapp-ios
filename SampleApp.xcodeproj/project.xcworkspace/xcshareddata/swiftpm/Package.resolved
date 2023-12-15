@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/emqx/CocoaMQTT.git",
       "state" : {
-        "revision" : "85387a2478551ad84f39be8a3c8587d34dd2bcf5",
-        "version" : "2.1.5"
+        "revision" : "aff43422925cc30b9af319f4c4dce4f52859baf4",
+        "version" : "2.1.8"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/daltoniam/Starscream.git",
       "state" : {
-        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
-        "version" : "3.1.2"
+        "revision" : "ac6c0fc9da221873e01bd1a0d4818498a71eef33",
+        "version" : "4.0.6"
       }
     }
   ],
