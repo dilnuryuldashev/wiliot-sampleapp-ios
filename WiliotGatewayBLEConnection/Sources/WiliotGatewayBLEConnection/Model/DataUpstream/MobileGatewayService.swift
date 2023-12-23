@@ -18,7 +18,7 @@ class MobileGatewayService {
     var gatewayTokensCallBack: ((Error?) -> Void)?
     var isConnected: Bool = false
 
-    let gatewayType: String = "Wiliot iPhone"
+    let gatewayType: String = "mobile"
 
     private let currentOwnerId: String
 
@@ -171,33 +171,44 @@ extension MobileGatewayService: TagPacketsSender {
         
         // Get the current location from BLEPacketsManager
         if let currentCLLocation = blePacketsManager?.locationService.lastLocation {
-            // Convert CLLocation to Location
-            let currentLocation = Location(latitude: currentCLLocation.coordinate.latitude,
-                                           longtitude: currentCLLocation.coordinate.longitude)
+            // Check if info is not nil
+            if var infoArray = info {
+                for (index, var packet) in infoArray.enumerated() {
+                    // Update the sequenceId for each packet
+                    packet.sequenceId = index
+                    
+                    // Assign the updated packet back to the array
+                    infoArray[index] = packet
+                }
+                // Convert CLLocation to Location
+                let currentLocation = Location(latitude: currentCLLocation.coordinate.latitude,
+                                               longtitude: currentCLLocation.coordinate.longitude)
 
-            // Create GatewayPacketsData with location and packets information
-            let gatewayPacketsData = GatewayPacketsData(location: currentLocation, packets: info)
+                // Create GatewayPacketsData with location and packets information
+                let gatewayPacketsData = GatewayPacketsData(location: currentLocation, packets: infoArray)
 
-            do {
-                let messageData = try GatewayDataEncoder.encode(gatewayPacketsData)
-                let messageString = try GatewayDataEncoder.encodeDataToString(messageData)
-//                #if DEBUG
-//                var debugStr = ""
-//                let jsonTransObject = try JSONSerialization.jsonObject(with: messageData,
-//                                                                       options: .fragmentsAllowed)
-//
-//                let jsonDataPretty = try JSONSerialization.data(withJSONObject: jsonTransObject,
-//                                                                options: .prettyPrinted)
-//                if let prettyString = String(data: jsonDataPretty, encoding: .utf8) {
-//                    debugStr.append("\(prettyString),\n")
-//                }
-//                print("MobileGatewayService sendPacketsInfo: \(debugStr)")
-//                #endif
-                try mqttClient?.sendMessage(messageString, topic: topicToPublish)
-                sendEventSignal?()
-            } catch {
-                print("MobileGatewayService sendPacketsInfo. Error sending message:\(error)")
+                do {
+                    let messageData = try GatewayDataEncoder.encode(gatewayPacketsData)
+                    let messageString = try GatewayDataEncoder.encodeDataToString(messageData)
+    //                #if DEBUG
+    //                var debugStr = ""
+    //                let jsonTransObject = try JSONSerialization.jsonObject(with: messageData,
+    //                                                                       options: .fragmentsAllowed)
+    //
+    //                let jsonDataPretty = try JSONSerialization.data(withJSONObject: jsonTransObject,
+    //                                                                options: .prettyPrinted)
+    //                if let prettyString = String(data: jsonDataPretty, encoding: .utf8) {
+    //                    debugStr.append("\(prettyString),\n")
+    //                }
+    //                print("MobileGatewayService sendPacketsInfo: \(debugStr)")
+    //                #endif
+                    try mqttClient?.sendMessage(messageString, topic: topicToPublish)
+                    sendEventSignal?()
+                } catch {
+                    print("MobileGatewayService sendPacketsInfo. Error sending message:\(error)")
+                }
             }
+            
         } else {
             // Handle the case when location is nil
             print("MobileGatewayService: Location is nil.")

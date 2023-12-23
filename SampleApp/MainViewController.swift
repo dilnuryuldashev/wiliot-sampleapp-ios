@@ -18,8 +18,8 @@ class MainViewController: UIViewController {
         super.loadView()
         // appToken and ownerID are hardcoded here because they are to be set externally without any plist files
         // as the main aim of this app is to act as a Unity plugin.
-        let appToken = "NDZmNTc3ODItYzg1NC00ZGM2LTk5NzctMzdlZWMyZDgzZTVmOkR5VHNJV2JzeXJwWW9Ic0hUcjFMSHpGZVRaVG14RTh2cmU3dGFNZ21oRlk="
-        let ownerID = "947302316108"
+        let appToken = "MmE1NjQ0MDctMmQ5Yy00NWJjLTk2MzktNjE1ZjUzM2QxZjBiOkxZU2ZIc0pzQjJiNG8yVS1oNTlBM1h1VGUtd3ZFY3A5SGgtZnpQaHB0TnM="
+        let ownerID = "201409513381"
         WiliotGatewayBLEConnection.initialize(appToken: appToken, ownerID: ownerID)
 
         if true {

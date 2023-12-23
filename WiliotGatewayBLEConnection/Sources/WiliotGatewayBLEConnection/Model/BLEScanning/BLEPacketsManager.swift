@@ -71,18 +71,10 @@ class BLEPacketsManager: NSObject {
         if BeaconDataReader.isBeaconDataGWtoBridgeMessage(data) || BeaconDataReader.isBeaconDataBridgeToGWmessage(data) {
             return
         }
-
         handlePixelPacket(packet)
     }
 
     private func handlePixelPacket(_ blePacket: BLEPacket) {
-        // print("BLEPacketsManager: \(blePacket.data.hexEncodedString(options: .upperCase)) - from - \(blePacket.uid.uuidString)")
-
-        let accelerationData = self.accelerationService.currentAcceleration
-        var location: Location?
-        if let clLocaton = locationService.lastLocation {
-            location = Location(latitude: clLocaton.coordinate.latitude, longtitude: clLocaton.coordinate.longitude)
-        }
         
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
         
@@ -115,12 +107,8 @@ class BLEPacketsManager: NSObject {
 
         let packet = TagPacketData(payload: payloadStr,
                             timestamp: blePacket.timeStamp,
-                            location: location,
-                            acceleration: accelerationData,
-                            bridgeId: nil,
-                            groupId: nil,
                             sequenceId: 0,
-                            nfpkt: nil,
+                            nfpkt: 1, // was set to nil before
                             rssi: blePacket.rssi)
 
         pacingReceiver?.receivePacketsByUUID([bleUUID: packet])

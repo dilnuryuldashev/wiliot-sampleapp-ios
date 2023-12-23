@@ -200,10 +200,6 @@ extension MQTTClient: CocoaMQTTDelegateObjectTarget {
             trace("did disconnect: \(err.debugDescription)")
             print("MQTT DISCONNECTION ERROR:\n \(error)\n")
             connectionState = "didDisconnect, Error(\(error.localizedDescription)"
-            let customError = NSError(domain: "com.MQTTCient",
-                                      code: 1,
-                                      userInfo: [NSLocalizedDescriptionKey: "MQTT connection lost with cause: \(connectionState)"])
-
             delegate?.mqttClientDidEncounterError(error)
         } else {
             trace("did disconnect: \(err.debugDescription)")

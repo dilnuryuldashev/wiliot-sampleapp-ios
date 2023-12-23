@@ -106,16 +106,16 @@ private let kOwnerIdKey = "owner_id"
 
             self.permissionsCompletionCancellable =
             permissions.$gatewayPermissionsGranted
+                .receive(on: DispatchQueue.main) // Ensure UI-related tasks are on the main thread
                 .sink {[weak self] granted in
                     if let weakSelf = self {
                         // We listen until all permissions are granted: bluetooth & location
                         // Setting the cancellable to nil will cancel the subscription
                         if granted {
+                            weakSelf.handlePermissionsRequestsCompletion(granted)
                             weakSelf.permissionsCompletionCancellable = nil
                         }
-                        weakSelf.handlePermissionsRequestsCompletion(granted)
                     }
-
                 }
 
             permissions.requestLocationAuth()
