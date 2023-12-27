@@ -53,10 +53,16 @@ public func bleActivityPublisher() {
     }.store(in: &WiliotGatewayBLEConnection.cancellables)
 }
 
-@_cdecl("checkAndRequestSystemPermissions")
-public func checkAndRequestSystemPermissions() {
+@_cdecl("checkAndRequestBluetoothPermissions")
+public func checkAndRequestBluetoothPermissions() {
     // Request system permissions using the exposed function
-    WiliotGatewayBLEConnection.checkAndRequestSystemPermissions();
+    WiliotGatewayBLEConnection.checkAndRequestBluetoothPermissions();
+}
+
+@_cdecl("checkAndRequestLocationPermissions")
+public func checkAndRequestLocationPermissions() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.checkAndRequestLocationPermissions();
 }
 
 
@@ -73,6 +79,40 @@ public func subscribeToPermissionUpdates() {
             // Permissions not granted, handle accordingly
             print("Permission not granted")
             WiliotGatewayBLEConnection.systemPermissionsGranted!(false)
+        }
+    }
+}
+
+@_cdecl("subscribeToBluetoothPermissionUpdates")
+public func subscribeToBluetoothPermissionUpdates() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.subscribeToBluetoothPermissionUpdates { (granted, message) in
+        // Handle the result of the permission request
+        if granted {
+            // Permissions granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Bluetooth Permission granted")
+            WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(true)
+        } else {
+            // Permissions not granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Bluetooth Permission not granted")
+            WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(false)
+        }
+    }
+}
+
+@_cdecl("subscribeToLocationPermissionUpdates")
+public func subscribeToLocationPermissionUpdates() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.subscribeToLocationPermissionUpdates { (granted, message) in
+        // Handle the result of the permission request
+        if granted {
+            // Permissions granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Location Permission granted")
+            WiliotGatewayBLEConnection.locationPermissionsGranted!(true)
+        } else {
+            // Permissions not granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Location  Permission not granted")
+            WiliotGatewayBLEConnection.locationPermissionsGranted!(false)
         }
     }
 }
@@ -117,6 +157,16 @@ public func bluetoothConnectionEstablished(bluetoothConnectionEstablishedDelegat
 @_cdecl("gatewayConnectionEstablished")
 public func gatewayConnectionEstablished(gatewayConnectionEstablishedDelegate: @convention(c) @escaping (Bool) -> Void) {
     WiliotGatewayBLEConnection.gatewayConnectionEstablished = gatewayConnectionEstablishedDelegate
+}
+
+@_cdecl("locationPermissionsGranted")
+public func locationPermissionsGranted(locationPermissionsGrantedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.locationPermissionsGranted = locationPermissionsGrantedDelegate
+}
+
+@_cdecl("bluetoothPermissionsGranted")
+public func bluetoothPermissionsGranted(bluetoothPermissionsGrantedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.bluetoothPermissionsGranted = bluetoothPermissionsGrantedDelegate
 }
 
 @_cdecl("systemPermissionsGranted")

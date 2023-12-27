@@ -66,7 +66,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        WiliotGatewayBLEConnection.checkAndRequestSystemPermissions()
+        WiliotGatewayBLEConnection.checkAndRequestBluetoothPermissions()
+        WiliotGatewayBLEConnection.checkAndRequestLocationPermissions()
+
+
     }
 
     override func viewDidAppear(_ animated: Bool) {

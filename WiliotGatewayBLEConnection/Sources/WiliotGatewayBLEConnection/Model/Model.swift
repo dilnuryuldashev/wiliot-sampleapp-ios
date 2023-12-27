@@ -7,15 +7,16 @@ private let kAPPTokenKey = "app_token"
 private let kOwnerIdKey = "owner_id"
 
 @objc public class Model: NSObject {
-
-    lazy var permissions: Permissions = {
-
-        let permissionsObj = Permissions()
-        return permissionsObj
-    }()
-
     var permissionsPublisher: AnyPublisher<Bool, Never> {
         _permissionsPublisher.eraseToAnyPublisher()
+    }
+    
+    var bluetoothPermissionsPublisher: AnyPublisher<Bool, Never> {
+        _bluetoothPermissionsPublisher.eraseToAnyPublisher()
+    }
+    
+    var locationPermissionsPublisher: AnyPublisher<Bool, Never> {
+        _locationPermissionsPublisher.eraseToAnyPublisher()
     }
 
     var statusPublisher: AnyPublisher<String, Never> {
@@ -35,6 +36,9 @@ private let kOwnerIdKey = "owner_id"
     private let _mqttConnectionPublisher: CurrentValueSubject<Bool, Never> = .init(false)
     private let _bleScannerPublisher: CurrentValueSubject<Float, Never> = .init(0.0)
     private let _permissionsPublisher: PassthroughSubject<Bool, Never> = .init()
+    private let _bluetoothPermissionsPublisher: PassthroughSubject<Bool, Never> = .init()
+    private let _locationPermissionsPublisher: PassthroughSubject<Bool, Never> = .init()
+
     private let _mqttSentMessagePublisher: PassthroughSubject<Void, Never> = .init()
 
     public var appToken = ""
@@ -43,7 +47,8 @@ private let kOwnerIdKey = "owner_id"
     private var bleService: BLEService?
     private var blePacketsmanager: BLEPacketsManager?
     private var networkService: NetworkService?
-    private var permissionsCompletionCancellable: AnyCancellable?
+    private var bluetoothPermissionsCompletionCancellable: AnyCancellable?
+    var locationPermissionsCompletionCancellable: AnyCancellable?
 
     // MARK: -
     override init() {
@@ -89,7 +94,7 @@ private let kOwnerIdKey = "owner_id"
     }
 
     func canStart() -> Bool {
-        if permissions.gatewayPermissionsGranted && !appToken.isEmpty && !ownerId.isEmpty && self.gatewayService?.authToken != nil {
+        if Permissions.instance.bluetoothCanBeUsed && Permissions.instance.locationCanBeUsed && !appToken.isEmpty && !ownerId.isEmpty && self.gatewayService?.authToken != nil {
             return true
         }
         return false
@@ -101,33 +106,123 @@ private let kOwnerIdKey = "owner_id"
         startBLE()
     }
 
-    public func checkAndRequestSystemPermissions() {
-        if !permissions.gatewayPermissionsGranted {
-
-            self.permissionsCompletionCancellable =
-            permissions.$gatewayPermissionsGranted
-                .receive(on: DispatchQueue.main) // Ensure UI-related tasks are on the main thread
-                .sink {[weak self] granted in
-                    if let weakSelf = self {
-                        // We listen until all permissions are granted: bluetooth & location
-                        // Setting the cancellable to nil will cancel the subscription
-                        if granted {
-                            weakSelf.handlePermissionsRequestsCompletion(granted)
-                            weakSelf.permissionsCompletionCancellable = nil
-                        }
-                    }
-                }
-
-            permissions.requestLocationAuth()
-            permissions.requestBluetoothAuth()
-        } else {
-            handlePermissionsRequestsCompletion(true)
+//    public func checkAndRequestBluetoothPermissions() {
+//        if !Permissions.instance.gatewayPermissionsGranted {
+//
+//            self.permissionsCompletionCancellable =
+//            Permissions.instance.$gatewayPermissionsGranted
+//                .receive(on: DispatchQueue.main) // Ensure UI-related tasks are on the main thread
+//                .sink {[weak self] granted in
+//                    if let weakSelf = self {
+//                        // We listen until all permissions are granted: bluetooth & location
+//                        // Setting the cancellable to nil will cancel the subscription
+//                        weakSelf.handlePermissionsRequestsCompletion(granted)
+//                        
+//                        if granted {
+//                            print("Permissions granted")
+//                            weakSelf.permissionsCompletionCancellable = nil
+//                        }
+//                        else
+//                        {
+//                            print("Permissions not granted")
+//                        }
+//                    }
+//                }
+//
+//
+//            Permissions.instance.requestLocationAuth()
+//
+//            // Request Bluetooth permission
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+//                self?.Permissions.instance.requestBluetoothAuth()
+//            }
+//        } else {
+//            handlePermissionsRequestsCompletion(true)
+//        }
+//    }
+    
+    // Function to check and request Bluetooth permissions
+    public func checkAndRequestBluetoothPermissions() {
+        // Check if Bluetooth permissions are already granted
+        guard !Permissions.instance.bluetoothCanBeUsed else {
+            handleBluetoothPermissionsRequestsCompletion(true)
+            handlePermissionsRequestsCompletion(Permissions.instance.bluetoothCanBeUsed && Permissions.instance.locationCanBeUsed)
+            return
         }
+
+        // Set up the subscription for permissions
+        self.bluetoothPermissionsCompletionCancellable =
+        Permissions.instance.$bluetoothCanBeUsed
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] granted in
+                guard let weakSelf = self else { return }
+
+                weakSelf.handlePermissionsRequestsCompletion(granted && Permissions.instance.locationCanBeUsed)
+                weakSelf.handleBluetoothPermissionsRequestsCompletion(granted)
+
+                if granted {
+                    print("Bluetooth Permissions granted")
+                    //weakSelf.bluetoothPermissionsCompletionCancellable = nil
+                } else {
+                    print("Bluetooth Permissions not granted")
+                }
+            }
+
+        Permissions.instance.requestBluetoothAuth()
+    }
+
+    // Function to check and request Location permissions
+    public func checkAndRequestLocationPermissions() {
+        // Check if Location permissions are already granted
+        guard !Permissions.instance.locationCanBeUsed else {
+            print("INSIDE guard !Permissions.instance.locationCanBeUsed else. Early return")
+            handleLocationPermissionsRequestsCompletion(true)
+            handlePermissionsRequestsCompletion(Permissions.instance.bluetoothCanBeUsed && Permissions.instance.locationCanBeUsed)
+            return
+        }
+
+        // Set up the subscription for permissions
+        self.locationPermissionsCompletionCancellable =
+            Permissions.instance.$locationCanBeUsed
+            //.receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("iOS locationPermissionsCompletionCancellable Combine Finished")
+                    break
+                case .failure(let error):
+                    print("iOS locationPermissionsCompletionCancellable Combine Error: \(error)")
+                }
+            }, receiveValue: { granted in
+                // Your logic here
+                self.handlePermissionsRequestsCompletion(Permissions.instance.bluetoothCanBeUsed && granted)
+                self.handleLocationPermissionsRequestsCompletion(granted)
+
+                if granted {
+                    print("Location Permissions granted")
+                    //self.locationPermissionsCompletionCancellable = nil
+                } else {
+                    print("Location Permissions not granted")
+                }
+            })
+        
+
+        // Request Location permission
+        Permissions.instance.requestLocationAuth()
+    }
+
+    
+    private func handleBluetoothPermissionsRequestsCompletion(_ granted: Bool) {
+        _bluetoothPermissionsPublisher.send(granted)
+    }
+    
+    private func handleLocationPermissionsRequestsCompletion(_ granted: Bool) {
+        _locationPermissionsPublisher.send(granted)
     }
 
     private func handlePermissionsRequestsCompletion(_ granted: Bool) {
         if !granted {
-            _statusPublisher.send("No required BLE or Location permissions.")
+            _statusPublisher.send("No required BLE or Location Permissions.instance.")
         }
         _permissionsPublisher.send(granted)
     }

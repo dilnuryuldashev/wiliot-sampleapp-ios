@@ -8,6 +8,8 @@ public class WiliotGatewayBLEConnection {
     public static var cancellables: Set<AnyCancellable> = []
     public static var bluetoothConnectionEstablished: ((Bool) -> Void)?
     public static var gatewayConnectionEstablished: ((Bool) -> Void)?
+    public static var bluetoothPermissionsGranted: ((Bool) -> Void)?
+    public static var locationPermissionsGranted: ((Bool) -> Void)?
     public static var systemPermissionsGranted: ((Bool) -> Void)?
 
     // Open the app settings to see what the app has access to
@@ -78,6 +80,36 @@ public class WiliotGatewayBLEConnection {
             }
             .store(in: &WiliotGatewayBLEConnection.cancellables)
     }
+    
+    public static func subscribeToBluetoothPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
+        print("Calling subscribeToBluetoothPermissionUpdates")
+        model.bluetoothPermissionsPublisher
+            .sink { granted in
+                if granted {
+                    print("subscribeToBluetoothPermissionUpdates: Permissions granted.")
+                    completion(true, "WiliotGatewayBLEConnection Bluetooth Permissions granted.")
+                } else {
+                    completion(false, "WiliotGatewayBLEConnection Bluetooth Permissions not granted.")
+                    print("subscribeToBluetoothPermissionUpdates: Permissions NOT granted.")
+                }
+            }
+            .store(in: &WiliotGatewayBLEConnection.cancellables)
+    }
+    
+    public static func subscribeToLocationPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
+        print("Calling subscribeToLocationPermissionUpdates")
+        model.locationPermissionsPublisher
+            .sink { granted in
+                if granted {
+                    print("subscribeToLocationPermissionUpdates: Permissions granted.")
+                    completion(true, "WiliotGatewayBLEConnection Location Permissions granted.")
+                } else {
+                    completion(false, "WiliotGatewayBLEConnection Bluetooth Permissions not granted.")
+                    print("subscribeToLocationPermissionUpdates: Location NOT granted.")
+                }
+            }
+            .store(in: &WiliotGatewayBLEConnection.cancellables)
+    }
 
     public static func connectToGatewayService(completion: @escaping (Bool, String) -> Void) {
         model.prepare {
@@ -90,8 +122,15 @@ public class WiliotGatewayBLEConnection {
         }
     }
     
-    public static func checkAndRequestSystemPermissions() {
-        model.checkAndRequestSystemPermissions()
+    public static func checkAndRequestBluetoothPermissions() {
+        model.checkAndRequestBluetoothPermissions()
+        // Handle the completion of permission requests and return the result to MainViewController.swift
+        // For simplicity, in this example, we are returning "granted" directly.
+        // completion(true, "Permissions granted.")
+    }
+    
+    public static func checkAndRequestLocationPermissions() {
+        model.checkAndRequestLocationPermissions()
         // Handle the completion of permission requests and return the result to MainViewController.swift
         // For simplicity, in this example, we are returning "granted" directly.
         // completion(true, "Permissions granted.")

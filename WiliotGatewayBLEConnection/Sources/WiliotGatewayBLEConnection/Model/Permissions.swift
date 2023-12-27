@@ -10,7 +10,8 @@ import CoreLocation
 import CoreBluetooth
 import Combine
 
-class Permissions: ObservableObject {
+class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
+    static let instance = Permissions()
     var isLocationPermissionsErrorNeedManualSetup: Bool = false {
         willSet {
             objectWillChange.send()
@@ -19,44 +20,32 @@ class Permissions: ObservableObject {
 
     var locationAlwaysGranded: Bool = false
     var locationWhenInUseGranted: Bool = false
-    var locationCanBeUsed: Bool = false {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-
+    @Published var locationCanBeUsed: Bool = false
     @Published var bluetoothCanBeUsed: Bool = false
 
     /// to be binded in the toggling the gateway mode
-    @Published private(set) var gatewayPermissionsGranted: Bool = false
+    //@Published private(set) var bluetoothPermissionsGranted: Bool = false
+    //@Published private(set) var locationPermissionsGranted: Bool = false
 
     var pLocationCanBeUsed: Bool {
         locationAlwaysGranded || locationWhenInUseGranted
     }
 
     private lazy var cbManager: CBCentralManager = CBCentralManager()
-    private lazy var locationManager: CLLocationManager = CLLocationManager()
-
+    var locationManager: CLLocationManager?
     private lazy var cbDelegate: CBCentralManagerDelegateObject = CBCentralManagerDelegateObject()
-    private lazy var locDelegate: CBLocationManagerDelegateObject = CBLocationManagerDelegateObject()
+    //private lazy var locDelegate: CBLocationManagerDelegateObject = CBLocationManagerDelegateObject()
+    var stateStr = ""
 
-    init() {
-
+    override init() {
+        super.init()
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
         checkAuthStatus()
     }
 
-    // MARK: - Initialization
-    convenience init(bluetoothManager: CBCentralManager? = nil, locationManager: CLLocationManager? = nil) {
-        self.init()
 
-        if let bluetoothManager = bluetoothManager {
-            self.cbManager = bluetoothManager
-        }
-
-        if let locManager = locationManager {
-            self.locationManager = locManager
-        }
-    }
     // MARK: -
     func checkAuthStatus() {
 
@@ -70,47 +59,61 @@ class Permissions: ObservableObject {
         return
         #endif
 
-        let status = locationManager.authorizationStatus
-
-        switch status {
-
-        case .notDetermined:
-            locationAlwaysGranded = false
-            locationWhenInUseGranted = false
-        case .restricted:
-            locationAlwaysGranded = false
-            locationWhenInUseGranted = false
-        case .denied:
-            locationAlwaysGranded = false
-            locationWhenInUseGranted = false
-        case .authorizedAlways:
-            locationAlwaysGranded = true
-            locationWhenInUseGranted = true
-        case .authorizedWhenInUse:
-            locationWhenInUseGranted = true
-        @unknown default:
-            locationAlwaysGranded = false
-            locationWhenInUseGranted = false
+        if let manager = locationManager {
+            
+            switch manager.authorizationStatus {
+                
+            case .notDetermined:
+                stateStr += "checkAuthStatus: location notDetermined && "
+                locationAlwaysGranded = false
+                locationWhenInUseGranted = false
+            case .restricted:
+                stateStr += "checkAuthStatus: location restricted && "
+                locationAlwaysGranded = false
+                locationWhenInUseGranted = false
+            case .denied:
+                stateStr += "checkAuthStatus: location denied && "
+                locationAlwaysGranded = false
+                locationWhenInUseGranted = false
+            case .authorizedAlways:
+                stateStr += "checkAuthStatus: location authorizedAlways && "
+                locationAlwaysGranded = true
+                locationWhenInUseGranted = true
+            case .authorizedWhenInUse:
+                stateStr += "checkAuthStatus: location authorizedWhenInUse && "
+                locationWhenInUseGranted = true
+            @unknown default:
+                stateStr += "checkAuthStatus: location unknown && "
+                locationAlwaysGranded = false
+                locationWhenInUseGranted = false
+            }
+            
+            locationCanBeUsed = pLocationCanBeUsed
         }
-
-        locationCanBeUsed = pLocationCanBeUsed
 
         let btState = CBCentralManager.authorization
-
+        
         switch btState {
         case .notDetermined:
+            stateStr += "checkAuthStatus: bluetooth notDetermined"
             bluetoothCanBeUsed = false
         case .restricted:
+            stateStr += "checkAuthStatus: bluetooth restricted"
             bluetoothCanBeUsed = false
         case .denied:
+            stateStr += "checkAuthStatus: bluetooth denied"
             bluetoothCanBeUsed = false
         case .allowedAlways:
+            stateStr += "checkAuthStatus: bluetooth allowedAlways"
             bluetoothCanBeUsed = true
         @unknown default:
+            stateStr += "checkAuthStatus: bluetooth fatalError"
             fatalError()
         }
-
-        updateGatewayPermissionsGranted()
+        
+        print("checkauth str: \(stateStr)")
+        //locationPermissionsGranted = locationCanBeUsed
+        //bluetoothPermissionsGranted = bluetoothCanBeUsed
     }
 
     func requestBluetoothAuth() {
@@ -122,80 +125,150 @@ class Permissions: ObservableObject {
 
     func requestLocationAuth() {
 
-        let status = locationManager.authorizationStatus
+        let status = locationManager?.authorizationStatus
         isLocationPermissionsErrorNeedManualSetup = false
+        stateStr = ""
         switch status {
         case .notDetermined:
-            locDelegate.delegate = self
-            locationManager.delegate = locDelegate
-            locationManager.requestAlwaysAuthorization()
+            stateStr += "location notDetermined"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+            locationManager?.delegate = self
+            locationManager?.requestWhenInUseAuthorization()
         case .restricted:
+            stateStr += "location restricted"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
             isLocationPermissionsErrorNeedManualSetup = true
             return
         case .denied:
+            stateStr += "location denied"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
             isLocationPermissionsErrorNeedManualSetup = true
             return
         case .authorizedAlways:
+            stateStr += "location always allow"
+            locationAlwaysGranded = true
             return
         case .authorizedWhenInUse:
-            locationManager.requestAlwaysAuthorization()
+            stateStr += "location authorizedWhenInUse"
+            locationWhenInUseGranted = true
+            locationManager?.requestAlwaysAuthorization()
+        case .none:
+            stateStr += "location none"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+            return
         @unknown default:
+            print("locationManagerAuthStateDidChange fatal error! value = \(String(describing: status))")
+            stateStr += "location fatalError"
             fatalError()
         }
+
+        locationCanBeUsed = locationWhenInUseGranted || locationAlwaysGranded
+
+        print("locationManagerAuthStateDidChange str: \(stateStr)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("iOS: locationManager didChangeAuthorization deprecated version, before switch")
+        switch status {
+        case .notDetermined:
+            stateStr += "location notDetermined"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .restricted:
+            stateStr += "location restricted"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .denied:
+            stateStr += "location denied"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .authorizedAlways:
+            stateStr += "location always allow"
+            locationAlwaysGranded = true
+        case .authorizedWhenInUse:
+            stateStr += "location authorizedWhenInUse"
+            locationWhenInUseGranted = true
+        @unknown default:
+            print("locationManagerAuthStateDidChange fatal error! value = \(manager.authorizationStatus)")
+            stateStr += "location fatalError"
+            //fatalError()
+        }
+
+        locationCanBeUsed = locationWhenInUseGranted || locationAlwaysGranded
+
+        print("locationManagerAuthStateDidChange str: \(stateStr)")
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        print("iOS: locationManagerDidChangeAuthorization before switch")
+        switch manager.authorizationStatus {
+        case .notDetermined:
+            stateStr += "location notDetermined"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .restricted:
+            stateStr += "location restricted"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .denied:
+            stateStr += "location denied"
+            locationWhenInUseGranted = false
+            locationAlwaysGranded = false
+//            locationCanBeUsed = false
+        case .authorizedAlways:
+            stateStr += "location always allow"
+            locationAlwaysGranded = true
+        case .authorizedWhenInUse:
+            stateStr += "location authorizedWhenInUse"
+            locationWhenInUseGranted = true
+        @unknown default:
+            print("locationManagerAuthStateDidChange fatal error! value = \(manager.authorizationStatus)")
+            stateStr += "location fatalError"
+            //fatalError()
+        }
+
+        locationCanBeUsed = locationWhenInUseGranted || locationAlwaysGranded
+
+        print("locationManagerAuthStateDidChange str: \(stateStr)")
+        //locationPermissionsGranted = locationCanBeUsed
+        //bluetoothPermissionsGranted = bluetoothCanBeUsed
+        
     }
 
-    private func updateGatewayPermissionsGranted() {
-        gatewayPermissionsGranted = locationCanBeUsed && bluetoothCanBeUsed
-
-    }
 }
 
 extension Permissions: CBCentralManagerStateDelegate {
     func bluetoothDidChangeAuthState(_ state: CBManagerAuthorization) {
         switch state {
         case .notDetermined:
+            stateStr += "bluetooth notDetermined"
             self.bluetoothCanBeUsed = false
         case .restricted:
+            stateStr += "bluetooth restricted"
             self.bluetoothCanBeUsed = false
         case .denied:
+            stateStr += "bluetooth denied"
             self.bluetoothCanBeUsed = false
         case .allowedAlways:
+            stateStr += "bluetooth allowedAlways"
             self.bluetoothCanBeUsed = true
         @unknown default:
+            stateStr += "bluetooth fatalError"
             fatalError()
         }
 
-        updateGatewayPermissionsGranted()
-    }
-}
-
-extension Permissions: CBLocationManagerStateDelegate {
-    func locationManagerAuthStateDidChange(_ state: CLAuthorizationStatus) {
-
-        switch state {
-        case .notDetermined:
-            locationWhenInUseGranted = false
-            locationAlwaysGranded = false
-//            locationCanBeUsed = false
-        case .restricted:
-            locationWhenInUseGranted = false
-            locationAlwaysGranded = false
-//            locationCanBeUsed = false
-        case .denied:
-            locationWhenInUseGranted = false
-            locationAlwaysGranded = false
-//            locationCanBeUsed = false
-        case .authorizedAlways:
-            locationAlwaysGranded = true
-        case .authorizedWhenInUse:
-            locationWhenInUseGranted = true
-        @unknown default:
-            fatalError()
-        }
-
-        locationCanBeUsed = locationWhenInUseGranted || locationAlwaysGranded
-
-        updateGatewayPermissionsGranted()
+        print("bluetoothDidChangeAuthState str: \(stateStr)")
+        //locationPermissionsGranted = locationCanBeUsed
+        //bluetoothPermissionsGranted = bluetoothCanBeUsed
     }
 }
 
@@ -222,17 +295,3 @@ extension CBCentralManagerDelegateObject: CBCentralManagerDelegate {
     }
 }
 
-// MARK: - LocationManager Delegate
-protocol CBLocationManagerStateDelegate: AnyObject {
-    func locationManagerAuthStateDidChange(_ state: CLAuthorizationStatus)
-}
-
-@objc class CBLocationManagerDelegateObject: NSObject {
-    weak var delegate: CBLocationManagerStateDelegate?
-}
-
-extension CBLocationManagerDelegateObject: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        delegate?.locationManagerAuthStateDidChange(manager.authorizationStatus)
-    }
-}
