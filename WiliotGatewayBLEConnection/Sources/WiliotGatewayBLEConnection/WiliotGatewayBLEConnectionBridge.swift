@@ -82,6 +82,11 @@ public func checkAndRequestLocationPermissions() {
     WiliotGatewayBLEConnection.checkAndRequestLocationPermissions();
 }
 
+@_cdecl("checkAndRequestCameraPermissions")
+public func checkAndRequestCameraPermissions() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.checkAndRequestCameraPermissions();
+}
 
 @_cdecl("subscribeToPermissionUpdates")
 public func subscribeToPermissionUpdates() {
@@ -129,6 +134,23 @@ public func subscribeToLocationPermissionUpdates() {
         } else {
             // Permissions not granted, handle accordingly
             print("WiliotGatewayBLEConnectionBridge Location  Permission not granted")
+            //WiliotGatewayBLEConnection.locationPermissionsGranted!(false)
+        }
+    }
+}
+
+@_cdecl("subscribeToCameraPermissionUpdates")
+public func subscribeToCameraPermissionUpdates() {
+    // Request system permissions using the exposed function
+    WiliotGatewayBLEConnection.subscribeToCameraPermissionUpdates { (granted, message) in
+        // Handle the result of the permission request
+        if granted {
+            // Permissions granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Camera Permission granted")
+            //WiliotGatewayBLEConnection.locationPermissionsGranted!(true)
+        } else {
+            // Permissions not granted, handle accordingly
+            print("WiliotGatewayBLEConnectionBridge Camera  Permission not granted")
             //WiliotGatewayBLEConnection.locationPermissionsGranted!(false)
         }
     }
@@ -186,7 +208,13 @@ public func bluetoothPermissionsGranted(bluetoothPermissionsGrantedDelegate: @co
     WiliotGatewayBLEConnection.bluetoothPermissionsGranted = bluetoothPermissionsGrantedDelegate
 }
 
+@_cdecl("cameraPermissionsGranted")
+public func cameraPermissionsGranted(cameraPermissionsGrantedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.cameraPermissionsGranted = cameraPermissionsGrantedDelegate
+}
+
 @_cdecl("systemPermissionsGranted")
 public func systemPermissionsGranted(systemPermissionsGrantedDelegate: @convention(c) @escaping (Bool) -> Void) {
     WiliotGatewayBLEConnection.systemPermissionsGranted = systemPermissionsGrantedDelegate
 }
+

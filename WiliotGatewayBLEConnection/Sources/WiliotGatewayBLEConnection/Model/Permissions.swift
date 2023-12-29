@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 import CoreBluetooth
 import Combine
+import AVFoundation
 
 class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
     static let instance = Permissions()
@@ -22,13 +23,17 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
     var locationWhenInUseGranted: Bool = false
     @Published var locationCanBeUsed: Bool = false
     @Published var bluetoothCanBeUsed: Bool = false
-
+    @Published var cameraCanBeUsed: Bool = false
     /// to be binded in the toggling the gateway mode
     //@Published private(set) var bluetoothPermissionsGranted: Bool = false
     //@Published private(set) var locationPermissionsGranted: Bool = false
 
     var pLocationCanBeUsed: Bool {
         locationAlwaysGranded || locationWhenInUseGranted
+    }
+    
+    var nativePermissionsGranted: Bool {
+        locationCanBeUsed && bluetoothCanBeUsed && cameraCanBeUsed
     }
 
     private lazy var cbManager: CBCentralManager = CBCentralManager()
@@ -44,11 +49,9 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     // MARK: -
     func checkAuthStatus() {
-        // Setting these values to false
-        // so that it notifies the subscribes in Model
-        // when values change inside this function
-        locationCanBeUsed = false
-        bluetoothCanBeUsed = false
+        let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        // Determine if the user previously authorized camera access.
+        cameraCanBeUsed = cameraStatus == .authorized
 //
 //        #if targetEnvironment(simulator)
 //        locationAlwaysGranded = true
@@ -114,7 +117,25 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("checkauth str: \(stateStr)")
         //locationPermissionsGranted = locationCanBeUsed
         //bluetoothPermissionsGranted = bluetoothCanBeUsed
-        WiliotGatewayBLEConnection.systemPermissionsGranted?(locationCanBeUsed && bluetoothCanBeUsed)
+        WiliotGatewayBLEConnection.systemPermissionsGranted?(locationCanBeUsed && bluetoothCanBeUsed && cameraCanBeUsed)
+    }
+    
+    func requestCameraAuth() {
+        let mediaType = AVMediaType.video
+        let mediaAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: mediaType)
+        
+        switch mediaAuthorizationStatus {
+        case .denied, .restricted:
+            cameraCanBeUsed = false
+        case .authorized:
+            cameraCanBeUsed = true
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                self.cameraCanBeUsed = granted
+            }
+        @unknown default:
+            fatalError()
+        }
     }
 
     func requestBluetoothAuth() {

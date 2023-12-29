@@ -9,6 +9,7 @@ public class WiliotGatewayBLEConnection: UIViewController {
     public static var bluetoothConnectionEstablished: ((Bool) -> Void)?
     public static var gatewayConnectionEstablished: ((Bool) -> Void)?
     public static var bluetoothPermissionsGranted: ((Bool) -> Void)?
+    public static var cameraPermissionsGranted: ((Bool) -> Void)?
     public static var locationPermissionsGranted: ((Bool) -> Void)?
     public static var systemPermissionsGranted: ((Bool) -> Void)?
 
@@ -71,11 +72,8 @@ public class WiliotGatewayBLEConnection: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { granted in
                 if granted {
-                    DispatchQueue.main.async {
-                        print("Swift subscribeToPermissionUpdates: connectToGatewayService called on the main thread")
-                        connectToGatewayService(completion: completionLogMessage)
-                    }
-                    print("subscribeToPermissionUpdates: Permissions granted.")
+                    print("Swift subscribeToPermissionUpdates: Permissions granted, connectToGatewayService called")
+                    connectToGatewayService(completion: completionLogMessage)
                     completion(true, "Permissions granted.")
                 } else {
                     completion(false, "Permissions not granted.")
@@ -96,6 +94,22 @@ public class WiliotGatewayBLEConnection: UIViewController {
                 } else {
                     completion(false, "WiliotGatewayBLEConnection Bluetooth Permissions not granted.")
                     print("subscribeToBluetoothPermissionUpdates: Permissions NOT granted.")
+                }
+            }
+            .store(in: &WiliotGatewayBLEConnection.cancellables)
+    }
+    
+    public static func subscribeToCameraPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
+        print("Calling subscribeToCameraPermissionUpdates")
+        model.cameraPermissionsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { granted in
+                if granted {
+                    print("subscribeToCameraPermissionUpdates: Permissions granted.")
+                    completion(true, "WiliotGatewayBLEConnection Camera Permissions granted.")
+                } else {
+                    completion(false, "WiliotGatewayBLEConnection Camera Permissions not granted.")
+                    print("subscribeToCameraPermissionUpdates: Permissions NOT granted.")
                 }
             }
             .store(in: &WiliotGatewayBLEConnection.cancellables)
@@ -143,11 +157,20 @@ public class WiliotGatewayBLEConnection: UIViewController {
         // completion(true, "Permissions granted.")
     }
     
+    public static func checkAndRequestCameraPermissions() {
+        model.checkAndRequestCameraPermissions()
+        // Handle the completion of permission requests and return the result to MainViewController.swift
+        // For simplicity, in this example, we are returning "granted" directly.
+        // completion(true, "Permissions granted.")
+    }
+    
     public static func checkDevicePermissionsStatus() {
         model.checkDevicePermissionsStatus()
         // Handle the completion of permission requests and return the result to MainViewController.swift
         // For simplicity, in this example, we are returning "granted" directly.
         // completion(true, "Permissions granted.")
     }
+    
+    
     
 }

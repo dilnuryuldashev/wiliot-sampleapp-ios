@@ -15,6 +15,10 @@ private let kOwnerIdKey = "owner_id"
         _bluetoothPermissionsPublisher.eraseToAnyPublisher()
     }
     
+    var cameraPermissionsPublisher: AnyPublisher<Bool, Never> {
+        _cameraPermissionsPublisher.eraseToAnyPublisher()
+    }
+    
     var locationPermissionsPublisher: AnyPublisher<Bool, Never> {
         _locationPermissionsPublisher.eraseToAnyPublisher()
     }
@@ -38,6 +42,7 @@ private let kOwnerIdKey = "owner_id"
     private let _permissionsPublisher: PassthroughSubject<Bool, Never> = .init()
     private let _bluetoothPermissionsPublisher: PassthroughSubject<Bool, Never> = .init()
     private let _locationPermissionsPublisher: PassthroughSubject<Bool, Never> = .init()
+    private let _cameraPermissionsPublisher: PassthroughSubject<Bool, Never> = .init()
 
     private let _mqttSentMessagePublisher: PassthroughSubject<Void, Never> = .init()
 
@@ -49,6 +54,8 @@ private let kOwnerIdKey = "owner_id"
     private var networkService: NetworkService?
     private var bluetoothPermissionsCompletionCancellable: AnyCancellable?
     var locationPermissionsCompletionCancellable: AnyCancellable?
+    private var cameraPermissionsCompletionCancellable: AnyCancellable?
+
 
     // MARK: -
     override init() {
@@ -112,6 +119,34 @@ private let kOwnerIdKey = "owner_id"
         _statusPublisher.send("Starting Connection and BLE scan")
         startGateway()
         startBLE()
+    }
+    
+    // Function to check and request Camera permissions
+    public func checkAndRequestCameraPermissions() {
+        // Check if Camera permissions are already granted
+        guard !Permissions.instance.cameraCanBeUsed else {
+            handleCameraPermissionsRequestsCompletion(true)
+            return
+        }
+
+        // Set up the subscription for permissions
+        self.cameraPermissionsCompletionCancellable =
+        Permissions.instance.$cameraCanBeUsed
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] granted in
+                guard let weakSelf = self else { return }
+
+                weakSelf.handleCameraPermissionsRequestsCompletion(granted)
+
+                if granted {
+                    print("Camera Permissions granted")
+                    weakSelf.cameraPermissionsCompletionCancellable = nil
+                } else {
+                    print("Camera Permissions not granted")
+                }
+            }
+        // Request Camera permissions
+        Permissions.instance.requestCameraAuth()
     }
     
     // Function to check and request Bluetooth permissions
@@ -179,11 +214,21 @@ private let kOwnerIdKey = "owner_id"
         // Request Location permission
         Permissions.instance.requestLocationAuth()
     }
+    
+    private func handleCameraPermissionsRequestsCompletion(_ granted: Bool) {
+        _cameraPermissionsPublisher.send(granted)
+        handlePermissionsRequestsCompletion(Permissions.instance.nativePermissionsGranted)
+        if let permission = WiliotGatewayBLEConnection.cameraPermissionsGranted {
+            print("handleCameraPermissionsRequestsCompletion value: \(granted)")
+            permission(granted)
+        }
+        
+    }
 
     
     private func handleBluetoothPermissionsRequestsCompletion(_ granted: Bool) {
         _bluetoothPermissionsPublisher.send(granted)
-        handlePermissionsRequestsCompletion(Permissions.instance.bluetoothCanBeUsed && Permissions.instance.locationCanBeUsed)
+        handlePermissionsRequestsCompletion(Permissions.instance.nativePermissionsGranted)
         if let permission = WiliotGatewayBLEConnection.bluetoothPermissionsGranted {
             print("handleBluetoothPermissionsRequestsCompletion value: \(granted)")
             permission(granted)
@@ -193,7 +238,7 @@ private let kOwnerIdKey = "owner_id"
     
     private func handleLocationPermissionsRequestsCompletion(_ granted: Bool) {
         _locationPermissionsPublisher.send(granted)
-        handlePermissionsRequestsCompletion(Permissions.instance.bluetoothCanBeUsed && Permissions.instance.locationCanBeUsed)
+        handlePermissionsRequestsCompletion(Permissions.instance.nativePermissionsGranted)
         if let permission = WiliotGatewayBLEConnection.locationPermissionsGranted {
             print("handleLocationPermissionsRequestsCompletion value: \(granted)")
             permission(granted)
