@@ -32,64 +32,64 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     private lazy var cbManager: CBCentralManager = CBCentralManager()
-    var locationManager: CLLocationManager?
+    private lazy var locationManager: CLLocationManager = CLLocationManager()
     private lazy var cbDelegate: CBCentralManagerDelegateObject = CBCentralManagerDelegateObject()
     //private lazy var locDelegate: CBLocationManagerDelegateObject = CBLocationManagerDelegateObject()
     var stateStr = ""
 
     override init() {
         super.init()
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        checkAuthStatus()
     }
 
 
     // MARK: -
     func checkAuthStatus() {
+        // Setting these values to false
+        // so that it notifies the subscribes in Model
+        // when values change inside this function
+        locationCanBeUsed = false
+        bluetoothCanBeUsed = false
+//
+//        #if targetEnvironment(simulator)
+//        locationAlwaysGranded = true
+//        locationWhenInUseGranted = true
+//        locationCanBeUsed = true
+//        bluetoothCanBeUsed = true
+//        gatewayPermissionsGranted = true
+//        updateGatewayPermissionsGranted()
+//        return
+//        #endif
 
-        #if targetEnvironment(simulator)
-        locationAlwaysGranded = true
-        locationWhenInUseGranted = true
-        locationCanBeUsed = true
-        bluetoothCanBeUsed = true
-        gatewayPermissionsGranted = true
-        updateGatewayPermissionsGranted()
-        return
-        #endif
-
-        if let manager = locationManager {
+        let locationState = locationManager.authorizationStatus
+        switch locationState {
             
-            switch manager.authorizationStatus {
-                
-            case .notDetermined:
-                stateStr += "checkAuthStatus: location notDetermined && "
-                locationAlwaysGranded = false
-                locationWhenInUseGranted = false
-            case .restricted:
-                stateStr += "checkAuthStatus: location restricted && "
-                locationAlwaysGranded = false
-                locationWhenInUseGranted = false
-            case .denied:
-                stateStr += "checkAuthStatus: location denied && "
-                locationAlwaysGranded = false
-                locationWhenInUseGranted = false
-            case .authorizedAlways:
-                stateStr += "checkAuthStatus: location authorizedAlways && "
-                locationAlwaysGranded = true
-                locationWhenInUseGranted = true
-            case .authorizedWhenInUse:
-                stateStr += "checkAuthStatus: location authorizedWhenInUse && "
-                locationWhenInUseGranted = true
-            @unknown default:
-                stateStr += "checkAuthStatus: location unknown && "
-                locationAlwaysGranded = false
-                locationWhenInUseGranted = false
-            }
-            
-            locationCanBeUsed = pLocationCanBeUsed
+        case .notDetermined:
+            stateStr += "checkAuthStatus: location notDetermined && "
+            locationAlwaysGranded = false
+            locationWhenInUseGranted = false
+        case .restricted:
+            stateStr += "checkAuthStatus: location restricted && "
+            locationAlwaysGranded = false
+            locationWhenInUseGranted = false
+        case .denied:
+            stateStr += "checkAuthStatus: location denied && "
+            locationAlwaysGranded = false
+            locationWhenInUseGranted = false
+        case .authorizedAlways:
+            stateStr += "checkAuthStatus: location authorizedAlways && "
+            locationAlwaysGranded = true
+            locationWhenInUseGranted = true
+        case .authorizedWhenInUse:
+            stateStr += "checkAuthStatus: location authorizedWhenInUse && "
+            locationWhenInUseGranted = true
+        @unknown default:
+            stateStr += "checkAuthStatus: location unknown && "
+            locationAlwaysGranded = false
+            locationWhenInUseGranted = false
         }
+        
+        locationCanBeUsed = pLocationCanBeUsed
+        
 
         let btState = CBCentralManager.authorization
         
@@ -114,6 +114,7 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("checkauth str: \(stateStr)")
         //locationPermissionsGranted = locationCanBeUsed
         //bluetoothPermissionsGranted = bluetoothCanBeUsed
+        WiliotGatewayBLEConnection.systemPermissionsGranted?(locationCanBeUsed && bluetoothCanBeUsed)
     }
 
     func requestBluetoothAuth() {
@@ -124,8 +125,8 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     func requestLocationAuth() {
-
-        let status = locationManager?.authorizationStatus
+        
+        let status = locationManager.authorizationStatus
         isLocationPermissionsErrorNeedManualSetup = false
         stateStr = ""
         switch status {
@@ -133,8 +134,8 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
             stateStr += "location notDetermined"
             locationWhenInUseGranted = false
             locationAlwaysGranded = false
-            locationManager?.delegate = self
-            locationManager?.requestWhenInUseAuthorization()
+            locationManager.delegate = self
+            locationManager.requestWhenInUseAuthorization()
         case .restricted:
             stateStr += "location restricted"
             locationWhenInUseGranted = false
@@ -154,12 +155,7 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse:
             stateStr += "location authorizedWhenInUse"
             locationWhenInUseGranted = true
-            locationManager?.requestAlwaysAuthorization()
-        case .none:
-            stateStr += "location none"
-            locationWhenInUseGranted = false
-            locationAlwaysGranded = false
-            return
+            locationManager.requestAlwaysAuthorization()
         @unknown default:
             print("locationManagerAuthStateDidChange fatal error! value = \(String(describing: status))")
             stateStr += "location fatalError"

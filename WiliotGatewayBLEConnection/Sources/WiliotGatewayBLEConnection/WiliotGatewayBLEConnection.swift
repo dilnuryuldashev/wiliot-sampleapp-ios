@@ -2,7 +2,7 @@ import Combine
 import UIKit
 import Foundation
 
-public class WiliotGatewayBLEConnection {
+public class WiliotGatewayBLEConnection: UIViewController {
     
     private static var model: Model = Model()
     public static var cancellables: Set<AnyCancellable> = []
@@ -68,9 +68,13 @@ public class WiliotGatewayBLEConnection {
     public static func subscribeToPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
         print("Calling subscribeToPermissionUpdates")
         model.permissionsPublisher
+            .receive(on: DispatchQueue.main)
             .sink { granted in
                 if granted {
-                    connectToGatewayService(completion: completionLogMessage)
+                    DispatchQueue.main.async {
+                        print("Swift subscribeToPermissionUpdates: connectToGatewayService called on the main thread")
+                        connectToGatewayService(completion: completionLogMessage)
+                    }
                     print("subscribeToPermissionUpdates: Permissions granted.")
                     completion(true, "Permissions granted.")
                 } else {
@@ -84,6 +88,7 @@ public class WiliotGatewayBLEConnection {
     public static func subscribeToBluetoothPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
         print("Calling subscribeToBluetoothPermissionUpdates")
         model.bluetoothPermissionsPublisher
+            .receive(on: DispatchQueue.main)
             .sink { granted in
                 if granted {
                     print("subscribeToBluetoothPermissionUpdates: Permissions granted.")
@@ -99,6 +104,7 @@ public class WiliotGatewayBLEConnection {
     public static func subscribeToLocationPermissionUpdates(completion: @escaping (Bool, String) -> Void) {
         print("Calling subscribeToLocationPermissionUpdates")
         model.locationPermissionsPublisher
+            .receive(on: DispatchQueue.main)
             .sink { granted in
                 if granted {
                     print("subscribeToLocationPermissionUpdates: Permissions granted.")
@@ -112,6 +118,7 @@ public class WiliotGatewayBLEConnection {
     }
 
     public static func connectToGatewayService(completion: @escaping (Bool, String) -> Void) {
+        print("Swift connectToGatewayService called")
         model.prepare {
             guard self.model.canStart() else {
                 completion(false, "Unable to start. Required data or permissions missing.")
@@ -135,4 +142,12 @@ public class WiliotGatewayBLEConnection {
         // For simplicity, in this example, we are returning "granted" directly.
         // completion(true, "Permissions granted.")
     }
+    
+    public static func checkDevicePermissionsStatus() {
+        model.checkDevicePermissionsStatus()
+        // Handle the completion of permission requests and return the result to MainViewController.swift
+        // For simplicity, in this example, we are returning "granted" directly.
+        // completion(true, "Permissions granted.")
+    }
+    
 }

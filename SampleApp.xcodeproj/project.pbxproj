@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,8 +14,22 @@
 		2C8B5B2128D8456B00BC45E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2028D8456B00BC45E8 /* Assets.xcassets */; };
 		2C8B5B2428D8456B00BC45E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2228D8456B00BC45E8 /* LaunchScreen.storyboard */; };
 		2C8B5B2C28D84D1A00BC45E8 /* SampleAuthConstants.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C8B5B2B28D84D1A00BC45E8 /* SampleAuthConstants.plist */; };
+		321D6F872B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 321D6F862B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		321D6F8A2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */; };
+		321D6F8B2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		321D6F902B3DCBB000D266E6 /* WiliotGatewayBLEConnection in Frameworks */ = {isa = PBXBuildFile; productRef = 321D6F8F2B3DCBB000D266E6 /* WiliotGatewayBLEConnection */; };
 		32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */ = {isa = PBXBuildFile; productRef = 32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		321D6F882B3DCB9800D266E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C8B5B0C28D8456900BC45E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 321D6F832B3DCB9800D266E6;
+			remoteInfo = WiliotBLEGatewayFramework;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		32F040122A8C3B2E00DB46B8 /* Embed Frameworks */ = {
@@ -24,6 +38,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				321D6F8B2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,7 +55,9 @@
 		2C8B5B2328D8456B00BC45E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C8B5B2528D8456B00BC45E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C8B5B2B28D84D1A00BC45E8 /* SampleAuthConstants.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SampleAuthConstants.plist; sourceTree = "<group>"; };
-		32F0400C2A8C3B2E00DB46B8 /* wiliot_ble_connection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wiliot_ble_connection.h; sourceTree = "<group>"; };
+		321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WiliotBLEGatewayFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		321D6F862B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiliotBLEGatewayFramework.h; sourceTree = "<group>"; };
+		321D6F912B3DCEC000D266E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		32F9BF092A6950C4007FA5D4 /* WiliotGatewayBLEConnection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WiliotGatewayBLEConnection; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,7 +66,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				321D6F8A2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Frameworks */,
 				32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321D6F812B3DCB9800D266E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				321D6F902B3DCBB000D266E6 /* WiliotGatewayBLEConnection in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +87,7 @@
 			children = (
 				32F9BF092A6950C4007FA5D4 /* WiliotGatewayBLEConnection */,
 				2C8B5B1628D8456900BC45E8 /* SampleApp */,
-				32F0400B2A8C3B2E00DB46B8 /* wiliot_ble_connection */,
+				321D6F852B3DCB9800D266E6 /* WiliotBLEGatewayFramework */,
 				2C8B5B1528D8456900BC45E8 /* Products */,
 				32F9BF0A2A695224007FA5D4 /* Frameworks */,
 			);
@@ -71,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				2C8B5B1428D8456900BC45E8 /* SampleApp.app */,
+				321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,12 +117,13 @@
 			path = SampleApp;
 			sourceTree = "<group>";
 		};
-		32F0400B2A8C3B2E00DB46B8 /* wiliot_ble_connection */ = {
+		321D6F852B3DCB9800D266E6 /* WiliotBLEGatewayFramework */ = {
 			isa = PBXGroup;
 			children = (
-				32F0400C2A8C3B2E00DB46B8 /* wiliot_ble_connection.h */,
+				321D6F912B3DCEC000D266E6 /* Info.plist */,
+				321D6F862B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h */,
 			);
-			path = wiliot_ble_connection;
+			path = WiliotBLEGatewayFramework;
 			sourceTree = "<group>";
 		};
 		32F9BF0A2A695224007FA5D4 /* Frameworks */ = {
@@ -106,6 +134,17 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		321D6F7F2B3DCB9800D266E6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				321D6F872B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		2C8B5B1328D8456900BC45E8 /* SampleApp */ = {
@@ -120,6 +159,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				321D6F892B3DCB9800D266E6 /* PBXTargetDependency */,
 			);
 			name = SampleApp;
 			packageProductDependencies = (
@@ -128,6 +168,27 @@
 			productName = SampleApp;
 			productReference = 2C8B5B1428D8456900BC45E8 /* SampleApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		321D6F832B3DCB9800D266E6 /* WiliotBLEGatewayFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 321D6F8C2B3DCB9800D266E6 /* Build configuration list for PBXNativeTarget "WiliotBLEGatewayFramework" */;
+			buildPhases = (
+				321D6F7F2B3DCB9800D266E6 /* Headers */,
+				321D6F802B3DCB9800D266E6 /* Sources */,
+				321D6F812B3DCB9800D266E6 /* Frameworks */,
+				321D6F822B3DCB9800D266E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WiliotBLEGatewayFramework;
+			packageProductDependencies = (
+				321D6F8F2B3DCBB000D266E6 /* WiliotGatewayBLEConnection */,
+			);
+			productName = WiliotBLEGatewayFramework;
+			productReference = 321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -142,6 +203,9 @@
 					2C8B5B1328D8456900BC45E8 = {
 						CreatedOnToolsVersion = 14.0;
 					};
+					321D6F832B3DCB9800D266E6 = {
+						CreatedOnToolsVersion = 15.1;
+					};
 				};
 			};
 			buildConfigurationList = 2C8B5B0F28D8456900BC45E8 /* Build configuration list for PBXProject "SampleApp" */;
@@ -154,12 +218,14 @@
 			);
 			mainGroup = 2C8B5B0B28D8456900BC45E8;
 			packageReferences = (
+				321D6F922B3DCFB200D266E6 /* XCLocalSwiftPackageReference "WiliotGatewayBLEConnection" */,
 			);
 			productRefGroup = 2C8B5B1528D8456900BC45E8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				2C8B5B1328D8456900BC45E8 /* SampleApp */,
+				321D6F832B3DCB9800D266E6 /* WiliotBLEGatewayFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -176,6 +242,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		321D6F822B3DCB9800D266E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -189,7 +262,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		321D6F802B3DCB9800D266E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		321D6F892B3DCB9800D266E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 321D6F832B3DCB9800D266E6 /* WiliotBLEGatewayFramework */;
+			targetProxy = 321D6F882B3DCB9800D266E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2C8B5B1D28D8456900BC45E8 /* Main.storyboard */ = {
@@ -409,6 +497,103 @@
 			};
 			name = Release;
 		};
+		321D6F8D2B3DCB9800D266E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 729D4CP2WY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WiliotBLEGatewayFramework/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MERGEABLE_LIBRARY = YES;
+				MERGED_BINARY_TYPE = automatic;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dyuldashev.WiliotBLEGatewayFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		321D6F8E2B3DCB9800D266E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 729D4CP2WY;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WiliotBLEGatewayFramework/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MERGEABLE_LIBRARY = YES;
+				MERGED_BINARY_TYPE = automatic;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dyuldashev.WiliotBLEGatewayFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -430,9 +615,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		321D6F8C2B3DCB9800D266E6 /* Build configuration list for PBXNativeTarget "WiliotBLEGatewayFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321D6F8D2B3DCB9800D266E6 /* Debug */,
+				321D6F8E2B3DCB9800D266E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		321D6F922B3DCFB200D266E6 /* XCLocalSwiftPackageReference "WiliotGatewayBLEConnection" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = WiliotGatewayBLEConnection;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		321D6F8F2B3DCBB000D266E6 /* WiliotGatewayBLEConnection */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WiliotGatewayBLEConnection;
+		};
 		32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WiliotGatewayBLEConnection;

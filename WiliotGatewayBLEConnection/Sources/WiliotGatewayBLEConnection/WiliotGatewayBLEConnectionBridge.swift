@@ -14,7 +14,9 @@ public func openAppSettings() {
 
 @_cdecl("observeStatusChanges")
 public func observeStatusChanges() {
-    WiliotGatewayBLEConnection.observeStatusChanges().sink { statusString in
+    WiliotGatewayBLEConnection.observeStatusChanges()
+        .receive(on: DispatchQueue.main)
+        .sink { statusString in
             // Handle the received statusString
             print("Received status: \(statusString)")
     }.store(in: &WiliotGatewayBLEConnection.cancellables)
@@ -23,7 +25,9 @@ public func observeStatusChanges() {
 @_cdecl("connectionPublisher")
 public func connectionPublisher() {
     // Call the connectionPublisher method and handle the received value
-    WiliotGatewayBLEConnection.connectionPublisher.sink { isConnected in
+    WiliotGatewayBLEConnection.connectionPublisher
+        .receive(on: DispatchQueue.main)
+        .sink { isConnected in
         if isConnected {
             WiliotGatewayBLEConnection.gatewayConnectionEstablished!(true)
             print("Gateway Connected")
@@ -34,10 +38,23 @@ public func connectionPublisher() {
     }.store(in: &WiliotGatewayBLEConnection.cancellables)
 }
 
+@_cdecl("checkDevicePermissionsStatus")
+public func checkDevicePermissionsStatus() {
+    // iOS 17 CLLOcationManagerDelegate is not talking to Unity
+    // after updating the Location Permissions
+    // That's why, we manually request the location
+    // permission state when the app is resumed
+    // Meaning the location pop-up window is closed
+    WiliotGatewayBLEConnection.checkDevicePermissionsStatus()
+}
+
+
 @_cdecl("bleActivityPublisher")
 public func bleActivityPublisher() {
     // Call the static bleActivityPublisher method from WiliotGatewayBLEConnection
-    WiliotGatewayBLEConnection.bleActivityPublisher().sink { floatValue in
+    WiliotGatewayBLEConnection.bleActivityPublisher()
+        .receive(on: DispatchQueue.main)
+        .sink { floatValue in
         // Process the received value
         print("Received ble activity value: \(floatValue)")
         
@@ -74,11 +91,11 @@ public func subscribeToPermissionUpdates() {
         if granted {
             // Permissions granted, handle accordingly
             print("Permission granted")
-            WiliotGatewayBLEConnection.systemPermissionsGranted!(true)
+            //WiliotGatewayBLEConnection.systemPermissionsGranted!(true)
         } else {
             // Permissions not granted, handle accordingly
             print("Permission not granted")
-            WiliotGatewayBLEConnection.systemPermissionsGranted!(false)
+            //WiliotGatewayBLEConnection.systemPermissionsGranted!(false)
         }
     }
 }
@@ -91,11 +108,11 @@ public func subscribeToBluetoothPermissionUpdates() {
         if granted {
             // Permissions granted, handle accordingly
             print("WiliotGatewayBLEConnectionBridge Bluetooth Permission granted")
-            WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(true)
+            //WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(true)
         } else {
             // Permissions not granted, handle accordingly
             print("WiliotGatewayBLEConnectionBridge Bluetooth Permission not granted")
-            WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(false)
+            //WiliotGatewayBLEConnection.bluetoothPermissionsGranted!(false)
         }
     }
 }
@@ -108,11 +125,11 @@ public func subscribeToLocationPermissionUpdates() {
         if granted {
             // Permissions granted, handle accordingly
             print("WiliotGatewayBLEConnectionBridge Location Permission granted")
-            WiliotGatewayBLEConnection.locationPermissionsGranted!(true)
+            //WiliotGatewayBLEConnection.locationPermissionsGranted!(true)
         } else {
             // Permissions not granted, handle accordingly
             print("WiliotGatewayBLEConnectionBridge Location  Permission not granted")
-            WiliotGatewayBLEConnection.locationPermissionsGranted!(false)
+            //WiliotGatewayBLEConnection.locationPermissionsGranted!(false)
         }
     }
 }
