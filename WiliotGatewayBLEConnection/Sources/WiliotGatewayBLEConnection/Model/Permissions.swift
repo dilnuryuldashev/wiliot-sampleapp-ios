@@ -118,6 +118,9 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         //locationPermissionsGranted = locationCanBeUsed
         //bluetoothPermissionsGranted = bluetoothCanBeUsed
         WiliotGatewayBLEConnection.systemPermissionsGranted?(locationCanBeUsed && bluetoothCanBeUsed && cameraCanBeUsed)
+        WiliotGatewayBLEConnection.bluetoothPermissionsGranted?(bluetoothCanBeUsed)
+        WiliotGatewayBLEConnection.cameraPermissionsGranted?(cameraCanBeUsed)
+        WiliotGatewayBLEConnection.locationPermissionsGranted?(locationCanBeUsed)
     }
     
     func requestCameraAuth() {

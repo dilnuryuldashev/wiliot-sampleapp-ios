@@ -226,6 +226,7 @@ extension MobileGatewayService: MQTTClientDelegate {
     }
 
     func mqttClientDidDisconnect() {
+        print("Mobile Gateway Service: mqttClientDidDisconnect")
         isConnecting = false
         self.isConnected = false
         self.isConnected = false
