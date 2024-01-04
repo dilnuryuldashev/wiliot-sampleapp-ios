@@ -61,6 +61,15 @@ private let kOwnerIdKey = "owner_id"
     override init() {
         super.init()
     }
+    
+    // When there is a internet connection issue
+    // The gateway service is disconnected
+    // and it does not reconnect once resumed
+    // We need to set gatewayService to null
+    // And then call prepare again
+    func voidGatewayService() {
+        gatewayService = nil
+    }
 
     func prepare(completion: @escaping (() -> Void)) {
         if gatewayService == nil {

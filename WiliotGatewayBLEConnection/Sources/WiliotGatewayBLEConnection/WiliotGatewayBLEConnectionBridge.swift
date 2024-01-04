@@ -183,6 +183,11 @@ public func cancelAllSubscriptions() {
     WiliotGatewayBLEConnection.cancelAllSubscriptions()
 }
 
+@_cdecl("reconnectToGatewayService")
+public func reconnectToGatewayService() {
+    WiliotGatewayBLEConnection.reconnectToGatewayService()
+}
+
 @_cdecl("tagIDResolved")
 public func tagIDResolved(tagIDResolvedDelegate: @convention(c) @escaping (UnsafePointer<CChar>, Int) -> Void) {
     ResolveAPI.tagIDResolved = tagIDResolvedDelegate

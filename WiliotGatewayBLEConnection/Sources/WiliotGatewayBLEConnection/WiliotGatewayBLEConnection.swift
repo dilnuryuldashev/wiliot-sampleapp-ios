@@ -143,6 +143,23 @@ public class WiliotGatewayBLEConnection: UIViewController {
         }
     }
     
+    public static func reconnectToGatewayService()
+    {
+        print("Swift reconnectToGatewayService called")
+        model.voidGatewayService()
+        connectToGatewayService { (granted, message) in
+            // Handle the result of the permission request
+            if granted {
+                // Permissions granted, handle accordingly
+                print("Gateway Reconnected")
+            } else {
+                // Permissions not granted, handle accordingly
+                print("Gateway could NOT reconnect")
+            }
+        }
+        
+    }
+    
     public static func checkAndRequestBluetoothPermissions() {
         model.checkAndRequestBluetoothPermissions()
         // Handle the completion of permission requests and return the result to MainViewController.swift
