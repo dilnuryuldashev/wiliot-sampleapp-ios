@@ -223,3 +223,17 @@ public func systemPermissionsGranted(systemPermissionsGrantedDelegate: @conventi
     WiliotGatewayBLEConnection.systemPermissionsGranted = systemPermissionsGrantedDelegate
 }
 
+@_cdecl("cameraPermissionsAlreadyRequested")
+public func cameraPermissionsAlreadyRequested(cameraPermissionsAlreadyRequestedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.cameraPermissionsAlreadyRequested = cameraPermissionsAlreadyRequestedDelegate
+}
+
+@_cdecl("bluetoothPermissionsAlreadyRequested")
+public func bluetoothPermissionsAlreadyRequested(bluetoothPermissionsAlreadyRequestedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.bluetoothPermissionsAlreadyRequested = bluetoothPermissionsAlreadyRequestedDelegate
+}
+
+@_cdecl("locationPermissionsAlreadyRequested")
+public func locationPermissionsAlreadyRequested(locationPermissionsAlreadyRequestedDelegate: @convention(c) @escaping (Bool) -> Void) {
+    WiliotGatewayBLEConnection.locationPermissionsAlreadyRequested = locationPermissionsAlreadyRequestedDelegate
+}

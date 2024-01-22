@@ -52,6 +52,8 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
         // Determine if the user previously authorized camera access.
         cameraCanBeUsed = cameraStatus == .authorized
+        WiliotGatewayBLEConnection.cameraPermissionsAlreadyRequested?(cameraStatus != .notDetermined)
+
 //
 //        #if targetEnvironment(simulator)
 //        locationAlwaysGranded = true
@@ -64,8 +66,9 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
 //        #endif
 
         let locationState = locationManager.authorizationStatus
+        WiliotGatewayBLEConnection.locationPermissionsAlreadyRequested?(locationState != .notDetermined)
+        
         switch locationState {
-            
         case .notDetermined:
             stateStr += "checkAuthStatus: location notDetermined && "
             locationAlwaysGranded = false
@@ -95,7 +98,8 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
         
 
         let btState = CBCentralManager.authorization
-        
+        WiliotGatewayBLEConnection.bluetoothPermissionsAlreadyRequested?(btState != .notDetermined)
+
         switch btState {
         case .notDetermined:
             stateStr += "checkAuthStatus: bluetooth notDetermined"

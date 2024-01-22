@@ -3,7 +3,6 @@ import UIKit
 import Foundation
 
 public class WiliotGatewayBLEConnection: UIViewController {
-    
     private static var model: Model = Model()
     public static var cancellables: Set<AnyCancellable> = []
     public static var bluetoothConnectionEstablished: ((Bool) -> Void)?
@@ -12,6 +11,10 @@ public class WiliotGatewayBLEConnection: UIViewController {
     public static var cameraPermissionsGranted: ((Bool) -> Void)?
     public static var locationPermissionsGranted: ((Bool) -> Void)?
     public static var systemPermissionsGranted: ((Bool) -> Void)?
+    
+    public static var cameraPermissionsAlreadyRequested: ((Bool) -> Void)?
+    public static var locationPermissionsAlreadyRequested: ((Bool) -> Void)?
+    public static var bluetoothPermissionsAlreadyRequested: ((Bool) -> Void)?
 
     // Open the app settings to see what the app has access to
     // And to enable/disable those permissions
@@ -187,7 +190,4 @@ public class WiliotGatewayBLEConnection: UIViewController {
         // For simplicity, in this example, we are returning "granted" directly.
         // completion(true, "Permissions granted.")
     }
-    
-    
-    
 }
