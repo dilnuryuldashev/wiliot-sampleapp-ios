@@ -3,7 +3,7 @@ import Foundation
 class ResolveAPI {
     public static var tagIDResolved: ((UnsafePointer<CChar>, Int) -> Void)?
     let host = "https://resolver.livingweb.app"
-    let authorizationString = "Bearer 3|J8b7mUpgFVoYrTlGvKb4oo6Oogabl1mpFvU5Y367"
+    let authorizationString = "Bearer 2|h4WlcnVeOTFtcuu4l3P01pdUNHzMbc5l1VIDQCHC"
     
     struct ResolveResult: Codable {
         let timestamp: Int
@@ -59,7 +59,7 @@ class ResolveAPI {
     }
 
     func sendPacketToResolveAPI(payloadString: String, completion: @escaping (String?, Error?) -> Void) {
-        guard let url = URL(string: "\(host)/api/resolve/pixel") else {
+        guard let url = URL(string: "\(host)/api/resolve/pixelar") else {
             return
         }
         
