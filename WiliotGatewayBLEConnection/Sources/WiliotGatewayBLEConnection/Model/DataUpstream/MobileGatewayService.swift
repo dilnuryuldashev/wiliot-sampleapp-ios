@@ -148,14 +148,26 @@ class MobileGatewayService {
     // MARK: - Topic
     private func getTopicString(topic: Topic) -> String? {
 
-        guard let clientId = mqttClient?.clientId else {
-            return nil
-        }
-
-        let topicName = topic.rawValue
+//        guard let clientId = mqttClient?.clientId else {
+//            return nil
+//        }
+//
+//        let topicName = topic.rawValue
+//        let ownerId = currentOwnerId
+//
+//        let toReturn = "\(topicName)-prod/\(ownerId)/\(clientId)"
+//        return toReturn
+        
+        let clientId = gatewayId
+        
+        let topicName = topic.rawValue //"data", "status"
+//        if topic == .data, cloudStage == .prodLegacy {
+//            topicName.append("-prod")
+//        }
         let ownerId = currentOwnerId
-
-        let toReturn = "\(topicName)-prod/\(ownerId)/\(clientId)"
+        
+        let toReturn = "\(topicName)/\(ownerId)/\(clientId)"
+        
         return toReturn
     }
 
@@ -246,6 +258,6 @@ extension MobileGatewayService: MQTTClientDelegate {
 // MARK: -
 extension MQTTEndpoint {
     static var defaultEndpoint: MQTTEndpoint {
-        MQTTEndpoint(host: "mqttv2.wiliot.com", port: 8883)
+        MQTTEndpoint(host: "mqtt.us-east-2.prod.wiliot.cloud", port: 8883)
     }
 }

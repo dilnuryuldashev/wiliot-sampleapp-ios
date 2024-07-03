@@ -90,6 +90,7 @@ class BLEPacketsManager: NSObject {
                     // if the packet was not resolved
                     // If it was, we get back a tag ID
                     if externalId != "unknown" {
+                        // print("Resolver ID: \(externalId)")
                         // We can print the returned ID for debugging purposes
                         // Or we can take its value use it for other purposes such as below
                         // where we publish ti to the listeners of ResolveAPI.tagIDResolved
