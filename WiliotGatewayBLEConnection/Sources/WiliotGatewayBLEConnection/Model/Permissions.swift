@@ -33,7 +33,7 @@ class Permissions: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     var nativePermissionsGranted: Bool {
-        locationCanBeUsed && bluetoothCanBeUsed && cameraCanBeUsed
+        locationCanBeUsed && bluetoothCanBeUsed //&& cameraCanBeUsed
     }
 
     private lazy var cbManager: CBCentralManager = CBCentralManager()

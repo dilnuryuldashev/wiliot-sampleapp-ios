@@ -14,7 +14,7 @@ class BeaconDataReader {
         let groupIdString = groupIdData.hexEncodedString()
 
         if isPacketFDAF(data), groupIdString == "0000ec" {
-//            print("groupIdString: \(groupIdString)")
+            print("BeaconDataReader: groupIdString: \(groupIdString)")
             return true
         }
         return false
@@ -26,7 +26,7 @@ class BeaconDataReader {
         let groupIdString = groupIdData.hexEncodedString()
 
         if isPacketFDAF(data), groupIdString == "0000ed" {
-//            print("Group ID: \(groupIdString)")
+            print("BeaconDataReader: Group ID: \(groupIdString)")
             return true
         }
         return false
@@ -38,7 +38,7 @@ class BeaconDataReader {
         let groupIdString = groupIdData.hexEncodedString()
 
         if isPacketFDAF(data), groupIdString == "0000eb" ||  groupIdString == "0000ee" {
-//            print("Group ID: \(groupIdString) isBeaconDataBridgeToGWmessage- TRUE")
+            print("BeaconDataReader: Group ID: \(groupIdString) isBeaconDataBridgeToGWmessage- TRUE")
             return true
         }
         return false

@@ -77,7 +77,18 @@ class BLEPacketsManager: NSObject {
     private func handlePixelPacket(_ blePacket: BLEPacket) {
         
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
+        print("BLEPacketsManager payloadStr: \(payloadStr)")
         
+        // Determine if this is a specific packet that should trigger a notification
+        if shouldTriggerNotification(for: blePacket) {
+            print("shouldTriggerNotification: true")
+            triggerNotification(for: blePacket)
+        }
+        else {
+            print("shouldTriggerNotification: false")
+        }
+        //triggerNotification(for: blePacket)
+
         // We create a short JSON string containing the packet ID
         // Then, we send it over to the Resolve API
         // When we get a resoled tag ID, we publish it
@@ -113,5 +124,29 @@ class BLEPacketsManager: NSObject {
                             rssi: blePacket.rssi)
 
         pacingReceiver?.receivePacketsByUUID([bleUUID: packet])
+    }
+    
+    private func shouldTriggerNotification(for packet: BLEPacket) -> Bool {
+        // Add logic to determine if a notification should be triggered
+        // For example, check the group ID or other specific data in the packet
+        let groupIdRange = 2..<5
+        let groupIdData = packet.data.subdata(in: groupIdRange)
+        let groupIdString = groupIdData.hexEncodedString()
+        
+        return groupIdString == "0000ec" // Example condition
+    }
+    
+    private func triggerNotification(for packet: BLEPacket) {
+        let content = UNMutableNotificationContent()
+        content.title = "BLE Packet Received"
+        content.body = "Payload: \(packet.data.hexEncodedString(options: .upperCase))"
+        content.sound = .default
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error triggering notification: \(error)")
+            }
+        }
     }
 }
