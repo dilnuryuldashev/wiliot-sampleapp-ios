@@ -79,14 +79,7 @@ class BLEPacketsManager: NSObject {
         let payloadStr = blePacket.data.hexEncodedString(options: .upperCase)
         print("BLEPacketsManager payloadStr: \(payloadStr)")
         
-        // Determine if this is a specific packet that should trigger a notification
-        if shouldTriggerNotification(for: blePacket) {
-            print("shouldTriggerNotification: true")
-            triggerNotification(for: blePacket)
-        }
-        else {
-            print("shouldTriggerNotification: false")
-        }
+
         //triggerNotification(for: blePacket)
 
         // We create a short JSON string containing the packet ID
@@ -106,6 +99,15 @@ class BLEPacketsManager: NSObject {
                         // Or we can take its value use it for other purposes such as below
                         // where we publish ti to the listeners of ResolveAPI.tagIDResolved
                         self.resolveAPI.publishResolvedTagId(message: externalId)
+                        // Determine if this is a specific packet that should trigger a notification
+                        self.triggerNotification(for: externalId)
+
+                        if self.shouldTriggerNotification(for: blePacket) {
+                            print("shouldTriggerNotification: true")
+                        }
+                        else {
+                            print("shouldTriggerNotification: false")
+                        }
                     }
                 } else if let error = error {
                     print("Error: \(error)")
@@ -136,10 +138,26 @@ class BLEPacketsManager: NSObject {
         return groupIdString == "0000ec" // Example condition
     }
     
-    private func triggerNotification(for packet: BLEPacket) {
+    private func triggerNotification(for packetStr: String) {
+        let currentTime = Date()
+        let userDefaults = UserDefaults.standard
+        let lastNotificationKey = "lastNotification_\(packetStr)"
+        
+        if let lastNotificationTime = userDefaults.object(forKey: lastNotificationKey) as? Date {
+            let timeInterval = currentTime.timeIntervalSince(lastNotificationTime)
+            
+            // Check if an hour (3600 seconds) has passed since the last notification
+            if timeInterval < 3600 {
+                return
+            }
+        }
+        
+        // Update the last notification time
+        userDefaults.set(currentTime, forKey: lastNotificationKey)
+        
         let content = UNMutableNotificationContent()
         content.title = "BLE Packet Received"
-        content.body = "Payload: \(packet.data.hexEncodedString(options: .upperCase))"
+        content.body = "Payload: \(packetStr)"
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
