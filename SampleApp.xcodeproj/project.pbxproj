@@ -18,6 +18,10 @@
 		321D6F8A2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */; };
 		321D6F8B2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		321D6F902B3DCBB000D266E6 /* WiliotGatewayBLEConnection in Frameworks */ = {isa = PBXBuildFile; productRef = 321D6F8F2B3DCBB000D266E6 /* WiliotGatewayBLEConnection */; };
+		32DF972E2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */; };
+		32DF972F2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		32DF97312C59B91B009F4DC3 /* WiliotMobilePixelResolver.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */; };
+		32DF97322C59B91B009F4DC3 /* WiliotMobilePixelResolver.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */ = {isa = PBXBuildFile; productRef = 32EC157F2A6960E40080192D /* WiliotGatewayBLEConnection */; };
 /* End PBXBuildFile section */
 
@@ -32,12 +36,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		32DF97302C59B860009F4DC3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				32DF972F2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32F040122A8C3B2E00DB46B8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				32DF97322C59B91B009F4DC3 /* WiliotMobilePixelResolver.xcframework in Embed Frameworks */,
 				321D6F8B2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -58,6 +74,7 @@
 		321D6F842B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WiliotBLEGatewayFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		321D6F862B3DCB9800D266E6 /* WiliotBLEGatewayFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiliotBLEGatewayFramework.h; sourceTree = "<group>"; };
 		321D6F912B3DCEC000D266E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WiliotMobilePixelResolver.xcframework; path = ../../Downloads/WiliotMobilePixelResolver.xcframework; sourceTree = "<group>"; };
 		32F9BF092A6950C4007FA5D4 /* WiliotGatewayBLEConnection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WiliotGatewayBLEConnection; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				321D6F8A2B3DCB9800D266E6 /* WiliotBLEGatewayFramework.framework in Frameworks */,
+				32DF97312C59B91B009F4DC3 /* WiliotMobilePixelResolver.xcframework in Frameworks */,
 				32EC15802A6960E40080192D /* WiliotGatewayBLEConnection in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32DF972E2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework in Frameworks */,
 				321D6F902B3DCBB000D266E6 /* WiliotGatewayBLEConnection in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,6 +148,7 @@
 		32F9BF0A2A695224007FA5D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32DF972D2C59B860009F4DC3 /* WiliotMobilePixelResolver.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,6 +197,7 @@
 				321D6F802B3DCB9800D266E6 /* Sources */,
 				321D6F812B3DCB9800D266E6 /* Frameworks */,
 				321D6F822B3DCB9800D266E6 /* Resources */,
+				32DF97302C59B860009F4DC3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

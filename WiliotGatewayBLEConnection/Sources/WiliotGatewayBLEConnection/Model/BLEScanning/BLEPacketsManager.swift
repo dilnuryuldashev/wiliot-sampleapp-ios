@@ -4,6 +4,7 @@
 import Foundation
 import Combine
 import UIKit
+import WiliotMobilePixelResolver
 
 class BLEPacketsManager: NSObject {
     private var cancellables: Set<AnyCancellable> = []
@@ -22,8 +23,9 @@ class BLEPacketsManager: NSObject {
     }
     
     // We talk to Resolve API to resolve Bluetooth packets into tag IDs
-    let resolveAPI: ResolveAPI = ResolveAPI()
-
+    let resolveAPI: WiliotPixelResolverMobile = WiliotPixelResolverMobile(with: <#String#>, gatewayId: <#String#>, authToken: <#String#>)
+    
+    
     func subscribeToBLEpacketsPublisher(publisher: AnyPublisher<BLEPacket, Never>) {
         publisher.sink {[weak self] packet in
             self?.handleBLEPacket(packet)
@@ -86,36 +88,39 @@ class BLEPacketsManager: NSObject {
         // Then, we send it over to the Resolve API
         // When we get a resoled tag ID, we publish it
         // to the listeners of ResolveAPI.tagIDResolved
-        if let payloadJSONString = resolveAPI.createPayloadJSONString(payloadValue: payloadStr) {
-            // Use the payloadJSONString as needed, like sending it in a network request
-            resolveAPI.sendPacketToResolveAPI(payloadString: payloadJSONString) { externalId, error in
-                if let externalId = externalId {
-                    // Resolve API returns unknown
-                    // if the packet was not resolved
-                    // If it was, we get back a tag ID
-                    if externalId != "unknown" {
-                        // print("Resolver ID: \(externalId)")
-                        // We can print the returned ID for debugging purposes
-                        // Or we can take its value use it for other purposes such as below
-                        // where we publish ti to the listeners of ResolveAPI.tagIDResolved
-                        self.resolveAPI.publishResolvedTagId(message: externalId)
-                        // Determine if this is a specific packet that should trigger a notification
-                        self.triggerNotification(for: externalId)
-
-                        if self.shouldTriggerNotification(for: blePacket) {
-                            print("shouldTriggerNotification: true")
-                        }
-                        else {
-                            print("shouldTriggerNotification: false")
-                        }
-                    }
-                } else if let error = error {
-                    print("Error: \(error)")
-                } else {
-                    print("Unknown error occurred.")
-                }
-            }
+        resolveAPI.receiveTagPayload(blePayloadString: payloadStr, payloadUUID: blePacket.uid, payloadRSSI: blePacket.rssi, payloadTimeStamp: blePacket.timeStamp, locationCoordinates: locationService.lastLocation?.coordinate) { 
+            
         }
+//        if let payloadJSONString = resolveAPI.createPayloadJSONString(payloadValue: payloadStr) {
+//            // Use the payloadJSONString as needed, like sending it in a network request
+//            resolveAPI.sendPacketToResolveAPI(payloadString: payloadJSONString) { externalId, error in
+//                if let externalId = externalId {
+//                    // Resolve API returns unknown
+//                    // if the packet was not resolved
+//                    // If it was, we get back a tag ID
+//                    if externalId != "unknown" {
+//                        // print("Resolver ID: \(externalId)")
+//                        // We can print the returned ID for debugging purposes
+//                        // Or we can take its value use it for other purposes such as below
+//                        // where we publish ti to the listeners of ResolveAPI.tagIDResolved
+//                        self.resolveAPI.publishResolvedTagId(message: externalId)
+//                        // Determine if this is a specific packet that should trigger a notification
+//                        self.triggerNotification(for: externalId)
+//
+//                        if self.shouldTriggerNotification(for: blePacket) {
+//                            print("shouldTriggerNotification: true")
+//                        }
+//                        else {
+//                            print("shouldTriggerNotification: false")
+//                        }
+//                    }
+//                } else if let error = error {
+//                    print("Error: \(error)")
+//                } else {
+//                    print("Unknown error occurred.")
+//                }
+//            }
+//        }
         
         let bleUUID = blePacket.uid
 
