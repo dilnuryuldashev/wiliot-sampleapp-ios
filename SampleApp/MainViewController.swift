@@ -4,10 +4,9 @@
 
 import UIKit
 import Combine
+import WiliotGatewayBLEConnection
 
 class MainViewController: UIViewController {
-
-    var model: Model?
 
     @IBOutlet weak var bluetoothIcon: UIImageView?
     @IBOutlet weak var networkIconIcon: UIImageView?
@@ -17,57 +16,60 @@ class MainViewController: UIViewController {
 
     override func loadView() {
         super.loadView()
+        // appToken and ownerID are hardcoded here because they are to be set externally without any plist files
+        // as the main aim of this app is to act as a Unity plugin.
+        let appToken = "MmE1NjQ0MDctMmQ5Yy00NWJjLTk2MzktNjE1ZjUzM2QxZjBiOkxZU2ZIc0pzQjJiNG8yVS1oNTlBM1h1VGUtd3ZFY3A5SGgtZnpQaHB0TnM="
+        let ownerID = "201409513381"
+        WiliotGatewayBLEConnection.initialize(appToken: appToken, ownerID: ownerID)
 
-        if model == nil {
+        if true {
 
-            let model = Model()
-
-            model.statusPublisher
-                .receive(on: DispatchQueue.main)
-                .sink {[unowned self] statusString in
-                    statusLabel?.text = statusString
-                }
-                .store(in: &cancellables)
-
-            model.connectionPublisher
-                .receive(on: DispatchQueue.main)
-                .sink {[weak self] isConnected in
+            WiliotGatewayBLEConnection.observeStatusChanges()
+                        .sink(receiveValue: { statusString in
+                            // Handle the received statusString
+                            print("Received status: \(statusString)")
+                        }).store(in: &cancellables)
+            
+            WiliotGatewayBLEConnection.connectionPublisher
+                .sink { [weak self] isConnected in
                     self?.handleConnectionStatus(isConnected)
                 }
                 .store(in: &cancellables)
+            
 
-            model.bleActivityPublisher
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: {[weak self] floatValue in
+            WiliotGatewayBLEConnection.bleActivityPublisher()
+                .sink { [weak self] floatValue in
                     self?.handleBLEactivityValue(floatValue)
-                })
-                .store(in: &cancellables)
-
-            model.permissionsPublisher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] granted in
-                    if granted {
-                        self?.proceedWithBLEandNetworking()
-                    }
                 }
                 .store(in: &cancellables)
 
-            model.messageSentActionPubliosher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] _ in
+            
+            // Request system permissions using the exposed function
+            WiliotGatewayBLEConnection.subscribeToPermissionUpdates { (granted, message) in
+                // Handle the result of the permission request
+                if granted {
+                    // Permissions granted, handle accordingly
+                    print("Permission granted")
+                } else {
+                    // Permissions not granted, handle accordingly
+                    print("Permission not granted")
+                }
+            }
+            
+            WiliotGatewayBLEConnection.subscribeToMessageSentAction { [weak self] in
                     self?.blinkNetworkingIcon()
                 }
-                .store(in: &cancellables)
-
-            self.model = model
         }
+        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        WiliotGatewayBLEConnection.checkAndRequestBluetoothPermissions()
+        WiliotGatewayBLEConnection.checkAndRequestLocationPermissions()
 
-        model?.checkAndRequestSystemPermissions()
+
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -101,20 +103,7 @@ class MainViewController: UIViewController {
             bluetoothIcon?.tintColor = .lightGray
         }
     }
-
-    private func proceedWithBLEandNetworking() {
-        model?.prepare {[weak self] in
-            guard let self = self,
-                  let aModel = self.model else {
-                    return
-                }
-
-            if aModel.canStart() {
-                aModel.start()
-
-            }
-        }
-    }
+    
 
     private func blinkNetworkingIcon() {
         statusLabel?.text = "sent Tags Info at: \(Date())"
